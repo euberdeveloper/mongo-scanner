@@ -1,0 +1,47 @@
+{
+  "name": "mongo-scanner",
+  "version": "1.0.0",
+  "description": "An npm module to retrieve the databases and the collections of a mongodb.",
+  "main": "node/index.js",
+  "types": "node/index.d.ts",
+  "scripts": {
+    "transpile": "tsc",
+    "commit": "git-cz"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/euberdeveloper/mongo-scanner.git"
+  },
+  "author": "Eugenio Vinicio Berretta <euberdeveloper@gmail.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/euberdeveloper/mongo-scanner/issues"
+  },
+  "homepage": "https://github.com/euberdeveloper/mongo-scanner#readme",
+  "keywords": [
+    "mongo-scanner",
+    "mongo",
+    "mongodb",
+    "database",
+    "collections",
+    "schema",
+    "database-schema",
+    "mongo-schema",
+    "scanner"
+  ],
+  "dependencies": {
+    "mongodb": "^3.4.1"
+  },
+  "devDependencies": {
+    "@types/mongodb": "^3.3.14",
+    "@types/node": "^13.1.1",
+    "commitizen": "^4.0.3",
+    "cz-conventional-changelog": "^3.0.2",
+    "typescript": "^3.7.4"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
