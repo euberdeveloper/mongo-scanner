@@ -1,9 +1,9 @@
 {
   "name": "mongo-scanner",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An npm module to retrieve the databases and the collections of a mongodb.",
-  "main": "node/index.js",
-  "types": "node/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "transpile": "tsc",
     "commit": "git-cz"
