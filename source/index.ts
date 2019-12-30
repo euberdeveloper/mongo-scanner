@@ -162,7 +162,7 @@ export class MongoScanner {
 
         if (options.excludeSystem) {
             result = result
-                .filter(collection => /^system./.test(collection));
+                .filter(collection => !/^system./.test(collection));
         }
         if (options.excludeCollections) {
             const excludes = Array.isArray(options.excludeCollections) ? options.excludeCollections : [options.excludeCollections];
