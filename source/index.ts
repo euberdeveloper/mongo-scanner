@@ -1,5 +1,21 @@
+export * from './errors';
+
 import { Database } from './utils/database';
 import { Cache } from './utils/cache';
+import { ListDatabasesError, ListCollectionsError } from './errors';
+
+/**
+ * The type of the callback called when there is an error in listing databases or collections.
+ * @param db If the error happened when listing collections, the db is the database whose collections 
+ * were tried to be provided
+ * @param error The error that happened. It is of type [[ListDatabasesError]] if it happened when 
+ * listing databases and it is of type [[ListCollectionsError]] if it happened when 
+ * listing collections.
+ */
+export type LackOfPermissionsCallback = (
+    db: string,
+    error: ListDatabasesError | ListCollectionsError
+) => void;
 
 /**
  * Represents the database's schema. Every key is a database and every value its collections.
@@ -43,13 +59,35 @@ export interface ScanOptions {
      * Default: false
      */
     excludeSystem?: boolean;
+    /**
+     * If you want to ignore and not throw an error occurred when trying to list databases or collections
+     * but the connection had not permission to do it. 
+     * 
+     * NB: Actually, this will ignore all the errors that 
+     * will occur when listing database or collections.
+     * 
+     * Default: false
+     */
+    ignoreLackOfPermissions?: boolean;
+    /**
+     * The [[LackOfpermissionsCallback]] callback called if an error occurred when trying to list databases or collections
+     * but the connection had not permission to do it.
+     * 
+     * NB: Actually, this will be called for all the errors that 
+     * will occur when listing database or collections. 
+     * 
+     * Default: false
+     */
+    onLackOfPermissions?: LackOfPermissionsCallback;
 };
 
 const DEFAULT_OPTIONS: ScanOptions = {
     useCache: false,
     excludeDatabases: undefined,
     excludeCollections: undefined,
-    excludeSystem: false
+    excludeSystem: false,
+    ignoreLackOfPermissions: false,
+    onLackOfPermissions: () => {}
 };
 
 /**
@@ -144,7 +182,7 @@ export class MongoScanner {
      * the hood and this is the object provided to MongoClient. Default: { }.
      */
     public async setConnection(uri = 'mongodb://localhost:27017', options: any = {}): Promise<void> {
-        await this.database.disconnect();
+        await Database.disconnectDatabase(this.database);
         this.persistentConnected = false;
         this.database = new Database(uri, options);
     }
@@ -156,7 +194,7 @@ export class MongoScanner {
      * more than an operation and do not want to open and close connections for each of them.
      */
     public async startConnection(): Promise<void> {
-        await this.database.connect();
+        await Database.connectDatabase(this.database);
         this.persistentConnected = true;
     }
 
@@ -164,7 +202,7 @@ export class MongoScanner {
      * Closes an already open persistent connection.
      */
     public async endConnection(): Promise<void> {
-        await this.database.disconnect();
+        await Database.disconnectDatabase(this.database);
         this.persistentConnected = false;
     }
 
@@ -182,13 +220,27 @@ export class MongoScanner {
         }
         if (!databases) {
             if (!this.database.connected) {
-                await this.database.connect();
+                await Database.connectDatabase(this.database);
             }
-            databases = await this.database.listDatabases();
+
+            try {
+                databases = await this.database.listDatabases();
+                this.cache.cacheDatabases(databases);
+            }
+            catch(error) {
+                const e = new ListDatabasesError(null, error);
+                options.onLackOfPermissions(null, e);
+                if (options.ignoreLackOfPermissions) {
+                    return [];
+                }
+                else {
+                    throw e;
+                }
+            }
+
             if (!this.persistentConnected) {
-                await this.database.disconnect();
+                await Database.disconnectDatabase(this.database);
             }
-            this.cache.cacheDatabases(databases);
         }
         databases = this.filterDatabases(databases, options);
 
@@ -210,13 +262,28 @@ export class MongoScanner {
         }
         if (!collections) {
             if (!this.database.connected) {
-                await this.database.connect();
+                await Database.connectDatabase(this.database);
             }
-            collections = await this.database.listCollections(database);
+
+            try {
+                collections = await this.database.listCollections(database);
+                this.cache.cacheCollections(database, collections);
+            }
+            catch(error) {
+                const e = new ListCollectionsError(null, database, error);
+                options.onLackOfPermissions(null, e);
+                if (options.ignoreLackOfPermissions) {
+                    return [];
+                }
+                else {
+                    throw e;
+                }
+            }
+
+            
             if (!this.persistentConnected) {
-                await this.database.disconnect();
+                await Database.disconnectDatabase(this.database);
             }
-            this.cache.cacheCollections(database, collections);
         }
         collections = this.filterCollections(collections, options);
 

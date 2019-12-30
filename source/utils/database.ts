@@ -1,4 +1,5 @@
 import { MongoClient, MongoClientOptions } from 'mongodb';
+import { ConnectionError, DisconnectionError } from '../errors';
 
 export class Database {
 
@@ -39,22 +40,22 @@ export class Database {
         }
     }
 
-    // public static async connectDatabase(database: Database): Promise<void> {
-    //     try {
-    //         await database.connect();
-    //     }
-    //     catch (error) {
-    //         throw new ConnectionError(null, database.uri, database.options, error);
-    //     }
-    // }
+    public static async connectDatabase(database: Database): Promise<void> {
+        try {
+            await database.connect();
+        }
+        catch (error) {
+            throw new ConnectionError(null, database.uri, database.options, error);
+        }
+    }
 
-    // public static async disconnectDatabase(database: Database): Promise<void> {
-    //     try {
-    //         await database.disconnect();
-    //     }
-    //     catch (error) {
-    //         throw new DisconnectionError(null, database.uri, database.options, error);
-    //     }
-    // }
+    public static async disconnectDatabase(database: Database): Promise<void> {
+        try {
+            await database.disconnect();
+        }
+        catch (error) {
+            throw new DisconnectionError(null, database.uri, database.options, error);
+        }
+    }
 
 }
