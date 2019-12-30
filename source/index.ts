@@ -60,6 +60,15 @@ export interface ScanOptions {
      */
     excludeSystem?: boolean;
     /**
+     * If you want to exclude empty databases from the result of the method "getSchema()"
+     * 
+     * NB: Database that are not empty but whose collections are excluded by other options such as
+     * excludeSystem or excludeCollections will be considered as empty.
+     * 
+     * Default: false
+     */
+    excludeEmptyDatabases?: boolean;
+    /**
      * If you want to ignore and not throw an error occurred when trying to list databases or collections
      * but the connection had not permission to do it. 
      * 
@@ -86,6 +95,7 @@ const DEFAULT_OPTIONS: ScanOptions = {
     excludeDatabases: undefined,
     excludeCollections: undefined,
     excludeSystem: false,
+    excludeEmptyDatabases: false,
     ignoreLackOfPermissions: false,
     onLackOfPermissions: () => {}
 };
@@ -308,6 +318,9 @@ export class MongoScanner {
         const databases = await this.listDatabases(options);
         for (const database of databases) {
             schema[database] = await this.listCollections(database, options);
+            if (options.excludeEmptyDatabases && !schema[database].length) {
+                delete schema[database];
+            }
         }
 
         if (!keepConnection) {
