@@ -60,6 +60,7 @@ export class MongoScanner {
 
     private database: Database;
     private cache: Cache;
+    private options: ScanOptions;
     private persistentConnected: boolean;
 
     /**
@@ -67,20 +68,34 @@ export class MongoScanner {
      * database connections. The connection is not established by the constructor, the connection 
      * parameters are only saved in the [[MongoScanner]] instance.
      * @param uri The string uri of the mongodb connection. Default: 'mongodb://localhost:27017'.
-     * @param options The options object of the mongodb connection. The npm mongodb module is used under
+     * @param connectionOptions The options object of the mongodb connection. The npm mongodb module is used under
      * the hood and this is the object provided to MongoClient. Default: { }.
+     * @param options The options that will be used as a fallback for the [[ScanOptions]]. For all the 
+     * keys that will not be present in the options provided to a method that retrieves database or collections,
+     * the values provided here will be used instead of the default ones. Default: { }.
      */
-    constructor(uri = 'mongodb://localhost:27017', options: any = {}) {
-        this.database = new Database(uri, options);
+    constructor(uri = 'mongodb://localhost:27017', connectionOptions: any = {}, options: ScanOptions = {}) {
+        this.database = new Database(uri, connectionOptions);
         this.cache = new Cache();
+        this.options = this.mergeOptionsWithDefault(options);
         this.persistentConnected = false;
+    }
+
+    private mergeOptionsWithDefault(options: ScanOptions = {}): ScanOptions {
+        const merged: ScanOptions = {};
+
+        for (const key in DEFAULT_OPTIONS) {
+            merged[key] = (options[key] === undefined ? DEFAULT_OPTIONS[key] : options[key]);
+        }
+
+        return merged;
     }
 
     private mergeOptions(options: ScanOptions = {}): ScanOptions {
         const merged: ScanOptions = {};
 
-        for (const key in DEFAULT_OPTIONS) {
-            merged[key] = (options[key] === undefined ? DEFAULT_OPTIONS[key] : options[key]);
+        for (const key in this.options) {
+            merged[key] = (options[key] === undefined ? this.options[key] : options[key]);
         }
 
         return merged;
