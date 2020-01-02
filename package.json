@@ -9,7 +9,7 @@
     "lint": "tslint --project tsconfig.json --config tslint.json",
     "lint:fix": "tslint --project tsconfig.json --config tslint.json --fix",
     "db:clean": "mongo-cleaner clean -y --throwIfNotTotal",
-    "db:restore": "mongorestore test/mock -- --quiet",
+    "db:restore": "mongorestore test/mock --quiet",
     "db:populate": "npm run db:clean && npm run db:restore",
     "test": "mocha --reporter spec",
     "nyc": "nyc --extension=ts --reporter=html --reporter=text --reporter=lcov -x \"source\\errors\" -x \"source/errors\" -x \"test\" npm run test",
