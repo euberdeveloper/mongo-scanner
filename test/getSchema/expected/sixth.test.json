@@ -1,0 +1,23 @@
+{
+    "admin": [
+        "system.version"
+    ],
+    "animals": [
+        "cows",
+        "tigers",
+        "dogs",
+        "cats",
+        "wombats",
+        "horses",
+        "lions"
+    ],
+    "empty": [
+        "empty"
+    ],
+    "fruits": [
+        "oranges",
+        "lemons",
+        "bananas",
+        "apples"
+    ]
+}

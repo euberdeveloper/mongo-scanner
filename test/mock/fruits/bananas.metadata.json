@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"fruits.bananas"}],"uuid":"fd7b81a5078e4f088b07eb24aa4f5e2e"}

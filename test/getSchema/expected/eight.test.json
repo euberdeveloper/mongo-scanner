@@ -1,0 +1,34 @@
+{
+    "admin": [],
+    "animals": [
+        "cows",
+        "tigers",
+        "dogs",
+        "cats",
+        "wombats",
+        "horses",
+        "lions"
+    ],
+    "database": [],
+    "database_test": [
+        "test_3",
+        "test_1",
+        "test_2",
+        "test"
+    ],
+    "empty": [
+        "empty"
+    ],
+    "fruits": [
+        "oranges",
+        "lemons",
+        "bananas",
+        "apples"
+    ],
+    "vegetables": [
+        "lattuce",
+        "carrots",
+        "fennel",
+        "celery"
+    ]
+}
