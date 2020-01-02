@@ -6,3 +6,4 @@ test
 coverage
 .gitignore
 tslint.json
+.travis.yml
