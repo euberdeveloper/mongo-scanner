@@ -1,4 +1,4 @@
-import { MongoScannerError } from "./mongoScannerError";
+import { MongoScannerError } from './mongoScannerError';
 
 /**
  * An error occurred with the module mongo-scanner when connecting to mongodb.

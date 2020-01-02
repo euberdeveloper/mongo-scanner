@@ -5,3 +5,4 @@ test
 .nyc_output
 coverage
 .gitignore
+tslint.json

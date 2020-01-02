@@ -293,7 +293,6 @@ export class MongoScanner {
                 }
             }
 
-            
             if (!this.persistentConnected) {
                 await Database.disconnectDatabase(this.database);
             }
