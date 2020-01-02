@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"vegetables.fennel"}],"uuid":"50a48207b5124085b4748a0582f6c90e"}

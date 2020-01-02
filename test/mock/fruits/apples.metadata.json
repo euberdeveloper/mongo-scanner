@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"fruits.apples"}],"uuid":"0d768846730b4f0ea62b55d588469aff"}

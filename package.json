@@ -6,6 +6,14 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "transpile": "tsc",
+    "db:clean": "mongo-cleaner clean -y",
+    "db:restore": "mongorestore test/mock",
+    "db:populate": "npm run db:clean && npm run db:restore",
+    "nyc": "nyc --extension=ts --reporter=html --reporter=text --reporter=lcov -x \"source\\errors\" -x \"test\" npm run test",
+    "cover:coveralls": "nyc report --extension=ts --reporter=text-lcov | coveralls",
+    "cover:codecov": "nyc report --extension=ts --reporter=text-lcov > coverage.lcov && codecov",
+    "cover": "npm run cover:coveralls && npm run cover:codecov",
+    "test": "mocha --reporter spec",
     "commit": "git-cz"
   },
   "repository": {
@@ -13,7 +21,7 @@
     "url": "git+https://github.com/euberdeveloper/mongo-scanner.git"
   },
   "author": "Eugenio Vinicio Berretta <euberdeveloper@gmail.com>",
-  "license": "GPL-3.0",
+  "license": "GNU",
   "bugs": {
     "url": "https://github.com/euberdeveloper/mongo-scanner/issues"
   },
@@ -35,8 +43,16 @@
   "devDependencies": {
     "@types/mongodb": "^3.3.14",
     "@types/node": "^13.1.1",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "codecov": "^3.6.1",
     "commitizen": "^4.0.3",
+    "coveralls": "^3.0.9",
     "cz-conventional-changelog": "^3.0.2",
+    "mocha": "^6.2.2",
+    "mongo-cleaner": "^3.0.3",
+    "nyc": "^15.0.0",
+    "tslint": "^5.20.1",
     "typescript": "^3.7.4"
   },
   "config": {
