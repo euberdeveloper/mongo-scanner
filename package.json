@@ -6,10 +6,10 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "transpile": "tsc",
-    "db:clean": "mongo-cleaner clean -y",
+    "db:clean": "mongo-cleaner clean -y --throwIfNotTotal",
     "db:restore": "mongorestore test/mock",
     "db:populate": "npm run db:clean && npm run db:restore",
-    "nyc": "nyc --extension=ts --reporter=html --reporter=text --reporter=lcov -x \"source\\errors\" -x \"test\" npm run test",
+    "nyc": "nyc --extension=ts --reporter=html --reporter=text --reporter=lcov -x \"source\\errors\" -x \"source/errors\" -x \"test\" npm run test",
     "cover:coveralls": "nyc report --extension=ts --reporter=text-lcov | coveralls",
     "cover:codecov": "nyc report --extension=ts --reporter=text-lcov > coverage.lcov && codecov",
     "cover": "npm run cover:coveralls && npm run cover:codecov",

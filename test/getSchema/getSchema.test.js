@@ -171,6 +171,22 @@ module.exports = (expect, MongoScanner) => {
 
         });
 
+        it(`Should get database schema except for the system collections and the collection empty and the empties databases`, async function () {
+
+            const options = {
+                excludeSystem: true,
+                excludeEmptyDatabases: true,
+                excludeCollections: 'empty'
+            };
+
+            const scanner = new MongoScanner(null, null, options);
+            const expected = orderObject(require('./expected/eleventh.test.json'));
+            const result = orderObject(await scanner.getSchema());
+
+            expect(result).to.deep.equal(expected)
+
+        });
+
     });
 
 }

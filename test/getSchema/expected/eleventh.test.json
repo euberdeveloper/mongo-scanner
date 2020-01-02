@@ -1,0 +1,45 @@
+{
+    "animals": [
+        "cows",
+        "tigers",
+        "dogs",
+        "cats",
+        "wombats",
+        "horses",
+        "lions"
+    ],
+    "database": [
+        "collection_1",
+        "collection_3",
+        "collection",
+        "collection_2"
+    ],
+    "database_test": [
+        "test_3",
+        "test_1",
+        "collection_2",
+        "collection_1",
+        "test_2",
+        "collection",
+        "collection_3",
+        "test"
+    ],
+    "fruits": [
+        "oranges",
+        "lemons",
+        "bananas",
+        "apples"
+    ],
+    "test": [
+        "test",
+        "test_3",
+        "test_2",
+        "test_1"
+    ],
+    "vegetables": [
+        "lattuce",
+        "carrots",
+        "fennel",
+        "celery"
+    ]
+}
