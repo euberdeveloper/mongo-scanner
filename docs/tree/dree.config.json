@@ -1,0 +1,15 @@
+{
+    "exclude": [ 
+        "node_modules",
+        "coverage",
+        "dist\\",
+        "docs\\html\\",
+        "docs\\markdown\\",
+        "test\\mock\\",
+        "dist/",
+        "docs/html/",
+        "docs/markdown/",
+        "test/mock/"
+    ],
+    "showHidden": false
+}

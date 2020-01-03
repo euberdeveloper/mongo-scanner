@@ -85,7 +85,7 @@ export interface ScanOptions {
      * NB: Actually, this will be called for all the errors that 
      * will occur when listing database or collections. 
      * 
-     * Default: false
+     * Default: () => { }
      */
     onLackOfPermissions?: LackOfPermissionsCallback;
 };
