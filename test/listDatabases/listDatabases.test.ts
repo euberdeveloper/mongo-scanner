@@ -1,19 +1,15 @@
-module.exports = (expect, MongoScanner) => {
+import { MongoScanner } from '../../source/index';
+
+import * as chai from 'chai';
+import * as chaiAsPromised from 'chai-as-promised';
+chai.use(chaiAsPromised);
+import { expect } from 'chai';
+
+import benchmark from '../utils/benchmark';
+
+export default function() {
 
     describe('Test: listDatabases function', function () {
-
-        async function benchmark(n, callback) {
-            let total = 0;
-
-            for (let i = 0; i < n; i++) {
-                const start = Date.now();
-                await callback();
-                const end = Date.now();
-                total += (end - start);
-            }
-
-            return (total / n);
-        }
 
         it(`Should list all databases`, async function () {
 

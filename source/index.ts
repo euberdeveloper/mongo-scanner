@@ -88,7 +88,7 @@ export interface ScanOptions {
      * Default: () => { }
      */
     onLackOfPermissions?: LackOfPermissionsCallback;
-};
+}
 
 const DEFAULT_OPTIONS: ScanOptions = {
     useCache: false,
@@ -122,9 +122,10 @@ export class MongoScanner {
      * keys that will not be present in the options provided to a method that retrieves database or collections,
      * the values provided here will be used instead of the default ones. Default: { }.
      */
-    constructor(uri: string, connectionOptions: any, options: ScanOptions = {}) {
+    constructor(uri?: string, connectionOptions?: any, options?: ScanOptions) {
         uri = uri || 'mongodb://localhost:27017';
         connectionOptions = connectionOptions || {};
+        options = options || {};
         
         this.database = new Database(uri, connectionOptions);
         this.cache = new Cache();

@@ -1,30 +1,16 @@
-module.exports = (expect, MongoScanner) => {
+import { MongoScanner } from '../../source/index';
+
+import * as chai from 'chai';
+import * as chaiAsPromised from 'chai-as-promised';
+chai.use(chaiAsPromised);
+import { expect } from 'chai';
+
+import benchmark from '../utils/benchmark';
+import orderObject from '../utils/orderObject';
+
+export default function() {
 
     describe('Test: getSchema function', function () {
-
-        function orderObject(object) {
-            Object.keys(object).map(key => {
-                if (Array.isArray(object[key])) {
-                    object[key] = object[key].sort();
-                }
-                else if (typeof object[key] === 'object') {
-                    orderObject(object[key]);
-                }
-            });
-        }
-
-        async function benchmark(n, callback) {
-            let total = 0;
-
-            for (let i = 0; i < n; i++) {
-                const start = Date.now();
-                await callback();
-                const end = Date.now();
-                total += (end - start);
-            }
-
-            return (total / n);
-        }
 
         it(`Should get the database schema`, async function () {
 
@@ -32,7 +18,7 @@ module.exports = (expect, MongoScanner) => {
             const expected = orderObject(require('./expected/first.test.json'));
             const result = orderObject(await scanner.getSchema());
 
-            expect(result).to.deep.equal(expected)
+            expect(result).to.deep.equal(expected);
 
         });
 
@@ -46,7 +32,7 @@ module.exports = (expect, MongoScanner) => {
             const expected = orderObject(require('./expected/second.test.json'));
             const result = orderObject(await scanner.getSchema());
 
-            expect(result).to.deep.equal(expected)
+            expect(result).to.deep.equal(expected);
 
         });
 
@@ -60,7 +46,7 @@ module.exports = (expect, MongoScanner) => {
             const expected = orderObject(require('./expected/third.test.json'));
             const result = orderObject(await scanner.getSchema());
 
-            expect(result).to.deep.equal(expected)
+            expect(result).to.deep.equal(expected);
 
         });
 
@@ -68,14 +54,14 @@ module.exports = (expect, MongoScanner) => {
 
             const options = {
                 excludeSystem: true,
-                excludeDatabases: 'admin'
+                excludeDatabases: 'empty'
             };
 
             const scanner = new MongoScanner(null, null, options);
             const expected = orderObject(require('./expected/fourth.test.json'));
             const result = orderObject(await scanner.getSchema());
 
-            expect(result).to.deep.equal(expected)
+            expect(result).to.deep.equal(expected);
 
         });
 
@@ -89,7 +75,7 @@ module.exports = (expect, MongoScanner) => {
             const expected = orderObject(require('./expected/fifth.test.json'));
             const result = orderObject(await scanner.getSchema());
 
-            expect(result).to.deep.equal(expected)
+            expect(result).to.deep.equal(expected);
 
         });
 
@@ -103,7 +89,7 @@ module.exports = (expect, MongoScanner) => {
             const expected = orderObject(require('./expected/sixth.test.json'));
             const result = orderObject(await scanner.getSchema());
 
-            expect(result).to.deep.equal(expected)
+            expect(result).to.deep.equal(expected);
 
         });
 
@@ -118,23 +104,23 @@ module.exports = (expect, MongoScanner) => {
             const expected = orderObject(require('./expected/seventh.test.json'));
             const result = orderObject(await scanner.getSchema());
 
-            expect(result).to.deep.equal(expected)
+            expect(result).to.deep.equal(expected);
 
         });
 
-        it(`Should get database schema except test database and collections containing "database" and system collections`, async function () {
+        it(`Should get database schema except test database and collections containing "collection" and system collections`, async function () {
 
             const options = {
                 excludeSystem: true,
                 excludeDatabases: 'test',
-                excludeCollections: /database/
+                excludeCollections: /collection/
             };
 
             const scanner = new MongoScanner(null, null, options);
             const expected = orderObject(require('./expected/eight.test.json'));
             const result = orderObject(await scanner.getSchema());
 
-            expect(result).to.deep.equal(expected)
+            expect(result).to.deep.equal(expected);
 
         });
 
@@ -148,14 +134,14 @@ module.exports = (expect, MongoScanner) => {
 
             const expected = orderObject(require('./expected/ninth.test.json'));
             const result = orderObject(await scanner.getSchema({ useCache: true }));
-            expect(result).to.deep.equal(expected)
+            expect(result).to.deep.equal(expected);
 
         });
 
-        it(`Should get database schema except fruit database and cats collection and check that with useCache is more efficient`, async function () {
+        it(`Should get database schema except fruits database and cats collection and check that with useCache is more efficient`, async function () {
 
             const options = {
-                excludeDatabases: 'fruit',
+                excludeDatabases: 'fruits',
                 excludeCollections: 'cats'
             };
 
@@ -167,7 +153,7 @@ module.exports = (expect, MongoScanner) => {
 
             const expected = orderObject(require('./expected/tenth.test.json'));
             const result = orderObject(await scanner.getSchema({ useCache: true }));
-            expect(result).to.deep.equal(expected)
+            expect(result).to.deep.equal(expected);
 
         });
 
@@ -183,7 +169,7 @@ module.exports = (expect, MongoScanner) => {
             const expected = orderObject(require('./expected/eleventh.test.json'));
             const result = orderObject(await scanner.getSchema());
 
-            expect(result).to.deep.equal(expected)
+            expect(result).to.deep.equal(expected);
 
         });
 

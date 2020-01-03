@@ -1,30 +1,16 @@
-module.exports = (expect, MongoScanner) => {
+import { MongoScanner } from '../../source/index';
+
+import * as chai from 'chai';
+import * as chaiAsPromised from 'chai-as-promised';
+chai.use(chaiAsPromised);
+import { expect } from 'chai';
+
+import benchmark from '../utils/benchmark';
+import orderObject from '../utils/orderObject';
+
+export default function () {
 
     describe('Test: startConnection and endConnection functions', function () {
-
-        function orderObject(object) {
-            Object.keys(object).map(key => {
-                if (Array.isArray(object[key])) {
-                    object[key] = object[key].sort();
-                }
-                else if (typeof object[key] === 'object') {
-                    orderObject(object[key]);
-                }
-            });
-        }
-
-        async function benchmark(n, callback) {
-            let total = 0;
-
-            for (let i = 0; i < n; i++) {
-                const start = Date.now();
-                await callback();
-                const end = Date.now();
-                total += (end - start);
-            }
-
-            return (total / n);
-        }
 
         it(`Should list all databases and check that with persistent connection is faster`, async function () {
 
@@ -72,7 +58,6 @@ module.exports = (expect, MongoScanner) => {
 
             const scanner = new MongoScanner();
             
-
             const noPersistentTime = await benchmark(23, async () => await scanner.getSchema());
             await scanner.startConnection();
             const persistentTime = await benchmark(23, async () => await scanner.getSchema());

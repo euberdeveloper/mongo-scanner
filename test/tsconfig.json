@@ -4,9 +4,9 @@
         "module": "commonjs",
         "target": "es5",
         "lib": [ "es2015" ],
-        "outDir": "dist",
+        "outDir": "../dist/test",
         "sourceMap": true,
-        "declaration": true
+        "resolveJsonModule": true
     },
-    "include": [ "source" ]
+    "include": [ "test.ts", "**/*.json" ]
 }

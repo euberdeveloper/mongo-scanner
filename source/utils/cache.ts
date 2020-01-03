@@ -2,7 +2,7 @@ export interface CacheSchema {
     databases: string[];
     collections: {
         [database: string]: string[];
-    }
+    };
 }
 
 export class Cache {
