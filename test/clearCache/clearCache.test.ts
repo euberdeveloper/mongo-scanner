@@ -35,7 +35,6 @@ export default function() {
             const result = orderObject(await scanner.getSchema({ useCache: true }));
             expect(result).to.deep.equal(expected);
 
-
         });
 
     });
