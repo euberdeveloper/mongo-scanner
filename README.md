@@ -361,6 +361,16 @@ Sets the mongodb connection parameters. It does not establishes the connection b
 
 A `void Promise`.
 
+### MongoScanner.clearCache
+
+**Syntax:**
+
+`clearCache()`
+
+**Description:**
+
+Clears the cache, which contains the results of the previous executions of the `MongoScanner` instance. It is a synchronous method and returns nothing.
+
 ## Project structure
 
 Made with **[dree](https://www.npmjs.com/package/dree)**.

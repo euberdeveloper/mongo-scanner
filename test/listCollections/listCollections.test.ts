@@ -1,4 +1,4 @@
-import { MongoScanner } from '../../source/index';
+import { MongoScanner, ScanOptions } from '../../source/index';
 
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
@@ -49,7 +49,7 @@ export default function() {
 
         it(`Should list all collections of database except for collection`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeCollections: 'collection'
             };
 
@@ -65,7 +65,7 @@ export default function() {
 
         it(`Should list all collections of database that do not finish with "_n"`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeCollections: /_[\d]/
             };
 
@@ -81,7 +81,7 @@ export default function() {
 
         it(`Should list all collections of test except for test`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeCollections: 'test'
             };
 
@@ -97,7 +97,7 @@ export default function() {
 
         it(`Should list all collections of test that do not finish with "_n"`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeCollections: /_[\d]$/
             };
 
@@ -113,7 +113,7 @@ export default function() {
 
         it(`Should list all collections of database_test except for collection and test`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeCollections: ['collection', 'test']
             };
 
@@ -129,7 +129,7 @@ export default function() {
 
         it(`Should list all collections of database_test that do not finish with "_n" and are not test`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeCollections: [/_[\d]$/, 'test']
             };
 
@@ -157,7 +157,7 @@ export default function() {
 
         it(`Should list all collections of admin except for the system ones`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeSystem: true
             };
 
@@ -186,7 +186,7 @@ export default function() {
 
         it(`Should list all collections of fruits except apples and bananas and check that using cache it is more efficient`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeCollections: ['apples', 'bananas']
             };
             const scanner = new MongoScanner(null, null, options);

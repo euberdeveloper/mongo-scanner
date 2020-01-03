@@ -1,4 +1,4 @@
-import { MongoScanner } from '../../source/index';
+import { MongoScanner, ScanOptions } from '../../source/index';
 
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
@@ -25,7 +25,7 @@ export default function() {
 
         it(`Should list all databases that does not end with "s"`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeDatabases: /s$/
             };
 
@@ -41,7 +41,7 @@ export default function() {
 
         it(`Should list all databases except database`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeDatabases: 'database'
             };
 
@@ -57,7 +57,7 @@ export default function() {
 
         it(`Should list all databases except test`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeDatabases: 'test'
             };
 
@@ -73,7 +73,7 @@ export default function() {
 
         it(`Should list all databases except database and test`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeDatabases: ['database', 'test']
             };
 
@@ -89,7 +89,7 @@ export default function() {
 
         it(`Should list all databases except the ones containing "database" or "test"`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeDatabases: [/database/, /test/]
             };
 
@@ -105,7 +105,7 @@ export default function() {
 
         it(`Should list all databases except vegetables and the ones containing "database" or "test"`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeDatabases: ['vegetables', /database/, /test/]
             };
 
@@ -137,7 +137,7 @@ export default function() {
 
         it(`Should list all databases except vegetables and the ones containing "database" or "test" and check that using cache it is more efficient`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeDatabases: ['vegetables', /database/, /test/]
             };
             const scanner = new MongoScanner(null, null, options);

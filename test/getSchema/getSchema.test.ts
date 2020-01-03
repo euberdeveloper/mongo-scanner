@@ -1,4 +1,4 @@
-import { MongoScanner } from '../../source/index';
+import { MongoScanner, ScanOptions } from '../../source/index';
 
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
@@ -24,7 +24,7 @@ export default function() {
 
         it(`Should get the database schema without system collections`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeSystem: true
             };
 
@@ -38,7 +38,7 @@ export default function() {
 
         it(`Should get the database schema without the admin database`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeDatabases: 'admin'
             };
 
@@ -52,7 +52,7 @@ export default function() {
 
         it(`Should get the database schema without the empty database and system collections`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeSystem: true,
                 excludeDatabases: 'empty'
             };
@@ -67,7 +67,7 @@ export default function() {
 
         it(`Should get database schema except the databases containing "database" or "test"`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeDatabases: [/database/, /test/]
             };
 
@@ -81,7 +81,7 @@ export default function() {
 
         it(`Should get database schema except database vegetables and the ones containing "database" or "test"`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeDatabases: ['vegetables', /database/, /test/]
             };
 
@@ -95,7 +95,7 @@ export default function() {
 
         it(`Should get database schema except database vegetables and apples and wombats collections`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeDatabases: 'vegetables',
                 excludeCollections: ['apples', 'wombats']
             };
@@ -110,7 +110,7 @@ export default function() {
 
         it(`Should get database schema except test database and collections containing "collection" and system collections`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeSystem: true,
                 excludeDatabases: 'test',
                 excludeCollections: /collection/
@@ -140,7 +140,7 @@ export default function() {
 
         it(`Should get database schema except fruits database and cats collection and check that with useCache is more efficient`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeDatabases: 'fruits',
                 excludeCollections: 'cats'
             };
@@ -159,7 +159,7 @@ export default function() {
 
         it(`Should get database schema except for the system collections and the collection empty and the empties databases`, async function () {
 
-            const options = {
+            const options: ScanOptions = {
                 excludeSystem: true,
                 excludeEmptyDatabases: true,
                 excludeCollections: 'empty'

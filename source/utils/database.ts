@@ -5,7 +5,7 @@ export class Database {
 
     private uri: string;
     private connection: MongoClient = null;
-    private options: MongoClientOptions = { 
+    private options: MongoClientOptions = {
         useUnifiedTopology: true,
         useNewUrlParser: true
     };
@@ -27,12 +27,12 @@ export class Database {
         return (await this.connection.db().admin().listDatabases())
             .databases.map(database => database.name);
     }
-    
+
     public async listCollections(db: string): Promise<string[]> {
         return (await this.connection.db(db).listCollections().toArray())
             .map(collection => collection.name);
     }
-    
+
     public async disconnect(): Promise<void> {
         if (this.connected) {
             await this.connection.close();

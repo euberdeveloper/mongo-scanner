@@ -125,7 +125,6 @@ export class MongoScanner {
     constructor(uri?: string, connectionOptions?: any, options?: ScanOptions) {
         uri = uri || 'mongodb://localhost:27017';
         connectionOptions = connectionOptions || {};
-        options = options || {};
         
         this.database = new Database(uri, connectionOptions);
         this.cache = new Cache();
@@ -133,7 +132,8 @@ export class MongoScanner {
         this.persistentConnected = false;
     }
 
-    private mergeOptionsWithDefault(options: ScanOptions = {}): ScanOptions {
+    private mergeOptionsWithDefault(options: ScanOptions): ScanOptions {
+        options = options || {};
         const merged: ScanOptions = {};
 
         for (const key in DEFAULT_OPTIONS) {
@@ -143,7 +143,8 @@ export class MongoScanner {
         return merged;
     }
 
-    private mergeOptions(options: ScanOptions = {}): ScanOptions {
+    private mergeOptions(options: ScanOptions): ScanOptions {
+        options = options || {};
         const merged: ScanOptions = {};
 
         for (const key in this.options) {
@@ -195,7 +196,10 @@ export class MongoScanner {
      * @param options The options object of the mongodb connection. The npm mongodb module is used under
      * the hood and this is the object provided to MongoClient. Default: { }.
      */
-    public async setConnection(uri = 'mongodb://localhost:27017', options: any = {}): Promise<void> {
+    public async setConnection(uri?: string, options?: any): Promise<void> {
+        uri = uri || 'mongodb://localhost:27017';
+        options = options || {};
+        
         await Database.disconnectDatabase(this.database);
         this.persistentConnected = false;
         this.database = new Database(uri, options);
@@ -242,8 +246,11 @@ export class MongoScanner {
                 this.cache.cacheDatabases(databases);
             }
             catch(error) {
-                const e = new ListDatabasesError(null, error);
+                /* istanbul ignore next */
+                const e = /* istanbul ignore next */ new ListDatabasesError(null, error);
+                /* istanbul ignore next */
                 options.onLackOfPermissions(null, e);
+                /* istanbul ignore next */
                 if (options.ignoreLackOfPermissions) {
                     return [];
                 }
@@ -284,8 +291,11 @@ export class MongoScanner {
                 this.cache.cacheCollections(database, collections);
             }
             catch(error) {
-                const e = new ListCollectionsError(null, database, error);
+                /* istanbul ignore next */
+                const e = /* istanbul ignore next */ new ListCollectionsError(null, database, error);
+                /* istanbul ignore next */
                 options.onLackOfPermissions(null, e);
+                /* istanbul ignore next */
                 if (options.ignoreLackOfPermissions) {
                     return [];
                 }
