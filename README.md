@@ -379,6 +379,9 @@ Made with **[dree](https://www.npmjs.com/package/dree)**.
 
 ```
 mongo-scanner
+ ├─> dist
+ │   ├─> source
+ │   └─> test
  ├─> source
  │   ├─> errors
  │   │   ├── connectionError.ts
@@ -388,43 +391,44 @@ mongo-scanner
  │   │   ├── listDatabasesError.ts
  │   │   └── mongoScannerError.ts
  │   ├── index.ts
+ │   ├── tsconfig.json
  │   └─> utils
  │       ├── cache.ts
  │       └── database.ts
  ├─> test
+ │   ├─> clearCache
+ │   │   ├── clearCache.test.ts
+ │   │   └── database-schema.test.json
  │   ├─> getSchema
  │   │   ├─> expected
- │   │   │   ├── eight.test.json
- │   │   │   ├── eleventh.test.json
- │   │   │   ├── fifth.test.json
  │   │   │   ├── first.test.json
- │   │   │   ├── fourth.test.json
- │   │   │   ├── ninth.test.json
  │   │   │   ├── second.test.json
- │   │   │   ├── seventh.test.json
- │   │   │   ├── sixth.test.json
- │   │   │   ├── tenth.test.json
  │   │   │   └── third.test.json
- │   │   └── getSchema.test.js
+ │   │   └── getSchema.test.ts
  │   ├─> listCollections
- │   │   └── listCollections.test.js
+ │   │   └── listCollections.test.ts
  │   ├─> listDatabases
- │   │   └── listDatabases.test.js
+ │   │   └── listDatabases.test.ts
  │   ├─> mock
  │   ├─> persistentConnection
  │   │   ├── database-schema.test.json
- │   │   └── persistentConnection.test.js
- │   └── test.js
+ │   │   └── persistentConnection.test.ts
+ │   ├─> setConnection
+ │   │   ├── database-schema.test.json
+ │   │   └── setConnection.test.ts
+ │   ├── test.ts
+ │   ├── tsconfig.json
+ │   └─> utils
+ │       ├── benchmark.ts
+ │       └── orderObject.ts
  ├─> docs
  │   └─> tree
  │       ├── dree.config.json
  │       └── tree.txt
- ├─> dist
  ├── LICENSE
  ├── README.md
  ├── package-lock.json
  ├── package.json
- ├── tsconfig.json
  └── tslint.json
 ```
 

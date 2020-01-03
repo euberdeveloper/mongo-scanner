@@ -2,11 +2,13 @@
     "exclude": [ 
         "node_modules",
         "coverage",
-        "dist\\",
+        "dist\\source\\",
+        "dist\\test\\",
         "docs\\html\\",
         "docs\\markdown\\",
         "test\\mock\\",
-        "dist/",
+        "dist/source/",
+        "dist/test/",
         "docs/html/",
         "docs/markdown/",
         "test/mock/"

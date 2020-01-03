@@ -1,6 +1,6 @@
 {
   "name": "mongo-scanner",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "An npm module to retrieve the databases and the collections of a mongodb",
   "main": "dist/source/index.js",
   "types": "dist/source/index.d.ts",
@@ -14,7 +14,7 @@
     "lint:fix:source": "tslint --project source/tsconfig.json --config tslint.json --fix",
     "lint:fix:test": "tslint --project test/tsconfig.json --config tslint.json --fix",
     "lint:fix": "npm run lint:fix:source && npm run lint:fix:test",
-    "db:clean": "mongo-cleaner clean -y --throwIfNotTotal",
+    "db:clean": "mongo-cleaner clean -y",
     "db:restore": "mongorestore test/mock --quiet",
     "db:populate": "npm run db:clean && npm run db:restore",
     "test": "mocha dist/test/test --reporter spec",
