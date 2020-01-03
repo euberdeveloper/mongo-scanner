@@ -12,6 +12,7 @@ export class ListDatabasesError extends MongoScannerError {
     public triggerError: Error;
 
     constructor(message?: string, triggerError?: Error) {
+        /* istanbul ignore next */
         super(message || ListDatabasesError.DEFAULT_MESSAGE);
         this.name = 'MongoScannerListDatabasesError';
         this.triggerError = triggerError || null;

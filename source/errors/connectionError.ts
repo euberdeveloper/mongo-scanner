@@ -20,6 +20,7 @@ export class ConnectionError extends MongoScannerError {
     public triggerError: Error;
 
     constructor(message?: string, uri?: string, options?: any, triggerError?: Error) {
+        /* istanbul ignore next */
         super(message || ConnectionError.DEFAULT_MESSAGE);
         this.name = 'MongoScannerConnectionError';
         this.uri = uri || null;

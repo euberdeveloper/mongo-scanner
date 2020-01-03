@@ -20,6 +20,7 @@ export class DisconnectionError extends MongoScannerError {
     public triggerError: Error;
 
     constructor(message?: string, uri?: string, options?: any, triggerError?: Error) {
+        /* istanbul ignore next */
         super(message || DisconnectionError.DEFAULT_MESSAGE);
         this.name = 'MongoScannerDisconnectionError';
         this.uri = uri || null;
