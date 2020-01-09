@@ -20,7 +20,9 @@ export class Database {
     }
 
     public async connect(): Promise<void> {
-        this.connection = await MongoClient.connect(this.uri, this.options);
+        if (!this.connected) {
+            this.connection = await MongoClient.connect(this.uri, this.options);
+        }
     }
 
     public async listDatabases(): Promise<string[]> {
