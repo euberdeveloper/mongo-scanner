@@ -15,7 +15,7 @@ export default function () {
 
             const willFail = async function() {
                 await scanner.startConnection();
-            }
+            };
 
             return expect(willFail()).to.be.rejected;
 
