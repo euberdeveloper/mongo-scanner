@@ -344,21 +344,6 @@ Closes an already open persistent connection.
 
 A `void Promise`.
 
-### MongoScanner.setConnection
-
-**Syntax:**
-
-`setConnection(uri, connectionOptions)`
-
-**Description:**
-
-Sets the mongodb connection parameters. It does not establishes the connection but only saves the parameters in the `MongoScanner` instance. If a connection was already established it will be closed.
-
-**Parameters:**
-
-* __uri__: Optional. The `string` uri of the mongodb connection. Default: `mongodb://localhost:27017`.
-* __options__: Optional. The options object of the mongodb connection. The npm mongodb module is used under the hood and this is the object provided to MongoClient. Default: `{ }`.
-
 **Result:**
 
 A `void Promise`.
@@ -413,9 +398,6 @@ mongo-scanner
  │   ├─> persistentConnection
  │   │   ├── database-schema.test.json
  │   │   └── persistentConnection.test.ts
- │   ├─> setConnection
- │   │   ├── database-schema.test.json
- │   │   └── setConnection.test.ts
  │   ├── test.ts
  │   ├── tsconfig.json
  │   └─> utils

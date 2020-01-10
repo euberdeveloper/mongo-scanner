@@ -202,6 +202,62 @@ export default function() {
             expect(result).to.equal(expected);
         });
 
+        it(`Should list all collections of animals multiple times and concurrently`, async function () {
+
+            const n = 100;
+            const range = [...Array(n).keys()];
+
+            const scanner = new MongoScanner();
+            const actualCollections = ['cats', 'cows', 'dogs', 'horses', 'lions', 'tigers', 'wombats'];
+            
+            const promises = range.map(async () => (await scanner.listCollections('animals')).sort());
+            const result = await Promise.all(promises);
+
+            const expected = range.map(() => actualCollections.sort());
+            expect(result).to.deep.equal(expected);
+
+        });
+
+        it(`Should list all collections of animals multiple times and concurrently with persistent connection`, async function () {
+
+            const n = 100;
+            const range = [...Array(n).keys()];
+
+            const scanner = new MongoScanner();
+            const actualCollections = ['cats', 'cows', 'dogs', 'horses', 'lions', 'tigers', 'wombats'];
+            
+            await scanner.startConnection();
+            const promises = range.map(async () => (await scanner.listCollections('animals')).sort());
+            const result = await Promise.all(promises);
+            await scanner.endConnection();
+
+            const expected = range.map(() => actualCollections.sort());
+            expect(result).to.deep.equal(expected);
+
+        });
+
+        it(`Should list all collections of animals multiple times and concurrently and stop the persistent in the middle`, async function () {
+
+            const n = 100;
+            const range = [...Array(n).keys()];
+
+            const scanner = new MongoScanner();
+            const actualCollections = ['cats', 'cows', 'dogs', 'horses', 'lions', 'tigers', 'wombats'];
+            
+            await scanner.startConnection();
+            const stopAndMock = async function() {
+                await scanner.endConnection();
+                return actualCollections.sort();
+            };
+            const promises = range.map(async () => (await scanner.listCollections('animals')).sort());
+            promises[Math.floor(n / 4)] = stopAndMock();
+            const result = await Promise.all(promises);
+
+            const expected = range.map(() => actualCollections.sort());
+            expect(result).to.deep.equal(expected);
+
+        });
+
     });
 
 }

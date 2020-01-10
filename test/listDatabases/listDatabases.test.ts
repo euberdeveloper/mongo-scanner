@@ -153,6 +153,62 @@ export default function() {
             expect(result).to.equal(expected);
         });
 
+        it(`Should list all databases multiple times and concurrently`, async function () {
+
+            const n = 100;
+            const range = [...Array(n).keys()];
+
+            const scanner = new MongoScanner();
+            const actualDatabases = ['admin', 'animals', 'fruits', 'vegetables', 'database', 'database_test', 'test', 'empty'];
+            
+            const promises = range.map(async () => (await scanner.listDatabases()).sort());
+            const result = await Promise.all(promises);
+
+            const expected = range.map(() => actualDatabases.sort());
+            expect(result).to.deep.equal(expected);
+
+        });
+
+        it(`Should list all databases multiple times and concurrently with persistent connection`, async function () {
+
+            const n = 100;
+            const range = [...Array(n).keys()];
+
+            const scanner = new MongoScanner();
+            const actualDatabases = ['admin', 'animals', 'fruits', 'vegetables', 'database', 'database_test', 'test', 'empty'];
+            
+            await scanner.startConnection();
+            const promises = range.map(async () => (await scanner.listDatabases()).sort());
+            const result = await Promise.all(promises);
+            await scanner.endConnection();
+
+            const expected = range.map(() => actualDatabases.sort());
+            expect(result).to.deep.equal(expected);
+
+        });
+
+        it(`Should list all databases multiple times and concurrently and stop the persistent in the middle`, async function () {
+
+            const n = 100;
+            const range = [...Array(n).keys()];
+
+            const scanner = new MongoScanner();
+            const actualDatabases = ['admin', 'animals', 'fruits', 'vegetables', 'database', 'database_test', 'test', 'empty'];
+            
+            await scanner.startConnection();
+            const stopAndMock = async function() {
+                await scanner.endConnection();
+                return actualDatabases.sort();
+            };
+            const promises = range.map(async () => (await scanner.listDatabases()).sort());
+            promises[Math.floor(n / 4)] = stopAndMock();
+            const result = await Promise.all(promises);
+
+            const expected = range.map(() => actualDatabases.sort());
+            expect(result).to.deep.equal(expected);
+
+        });
+
     });
 
 }

@@ -97,7 +97,7 @@ const DEFAULT_OPTIONS: ScanOptions = {
     excludeSystem: false,
     excludeEmptyDatabases: false,
     ignoreLackOfPermissions: false,
-    onLackOfPermissions: () => {}
+    onLackOfPermissions: () => { }
 };
 
 /**
@@ -106,10 +106,35 @@ const DEFAULT_OPTIONS: ScanOptions = {
  */
 export class MongoScanner {
 
-    private database: Database;
     private cache: Cache;
-    private options: ScanOptions;
+    private database: Database;
     private persistentConnected: boolean;
+    private persistentActives: number;
+
+    private _uri: string;
+    private _connectionOptions: any;
+    private _options: ScanOptions;
+
+    private get uri(): string {
+        return this._uri;
+    }
+    private set uri(uri: string) {
+        this._uri = uri || 'mongodb://localhost:27017';
+    }
+
+    private get connectionOptions(): any {
+        return this._connectionOptions;
+    }
+    private set connectionOptions(connectionOptions: any) {
+        this._connectionOptions = connectionOptions || {};
+    }
+
+    private get options(): ScanOptions {
+        return this._options;
+    }
+    private set options(options: ScanOptions) {
+        this._options = this.mergeOptionsWithDefault(options);
+    }
 
     /**
      * The constructor of the [[MongoScanner]] class. The params are the uri and options for the 
@@ -123,13 +148,14 @@ export class MongoScanner {
      * the values provided here will be used instead of the default ones. Default: { }.
      */
     constructor(uri?: string, connectionOptions?: any, options?: ScanOptions) {
-        uri = uri || 'mongodb://localhost:27017';
-        connectionOptions = connectionOptions || {};
-        
-        this.database = new Database(uri, connectionOptions);
+        this.uri = uri;
+        this.connectionOptions = connectionOptions;
+        this.options = options;
+
+        this.database = null;
         this.cache = new Cache();
-        this.options = this.mergeOptionsWithDefault(options);
         this.persistentConnected = false;
+        this.persistentActives = 0;
     }
 
     private mergeOptionsWithDefault(options: ScanOptions): ScanOptions {
@@ -168,7 +194,7 @@ export class MongoScanner {
             result = result
                 .filter(database => this.passes(database, excludes));
         }
-        
+
         return result;
     }
 
@@ -184,25 +210,114 @@ export class MongoScanner {
             result = result
                 .filter(database => this.passes(database, excludes));
         }
-        
+
         return result;
     }
 
-    /**
-     * Sets the mongodb connection parameters. It does not establishes the connection but only 
-     * saves the parameters in the [[MongoScanner]] instance. If a connection was already established
-     * it will be closed.
-     * @param uri The string uri of the mongodb connection. Default: 'mongodb://localhost:27017'.
-     * @param options The options object of the mongodb connection. The npm mongodb module is used under
-     * the hood and this is the object provided to MongoClient. Default: { }.
-     */
-    public async setConnection(uri?: string, options?: any): Promise<void> {
-        uri = uri || 'mongodb://localhost:27017';
-        options = options || {};
-        
-        await Database.disconnectDatabase(this.database);
-        this.persistentConnected = false;
-        this.database = new Database(uri, options);
+    private async _listDatabases(options: ScanOptions, inheritDb: Database): Promise<string[]> {
+        let databases: string[];
+        if (options.useCache) {
+            databases = this.cache.listDatabases();
+        }
+        if (!databases) {
+            let database = inheritDb, persistent = false;
+            if (!database) {
+                if (this.persistentConnected) {
+                    this.persistentActives++;
+                    persistent = true;
+                    database = this.database;
+                }
+                else {
+                    database = new Database(this.uri, this.connectionOptions);
+                    await Database.connectDatabase(database);
+                }
+            }
+
+            try {
+                databases = await database.listDatabases();
+                this.cache.cacheDatabases(databases);
+            }
+            catch (error) {
+                /* istanbul ignore next */
+                const e = new ListDatabasesError(null, error);
+                /* istanbul ignore next */
+                options.onLackOfPermissions(null, e);
+                /* istanbul ignore next */
+                if (options.ignoreLackOfPermissions) {
+                    return [];
+                }
+                else {
+                    throw e;
+                }
+            }
+            finally {
+                let disconnect = (inheritDb === null);
+                if (persistent) {
+                    this.persistentActives--;
+                    disconnect = (!this.persistentConnected && this.persistentActives === 0);
+                }
+                if (disconnect) {
+                    await Database.disconnectDatabase(database);
+                }
+            }
+
+        }
+        databases = this.filterDatabases(databases, options);
+
+        return databases;
+    }
+
+    public async _listCollections(db: string, options: ScanOptions, inheritDb: Database): Promise<string[]> {
+        let collections: string[];
+        if (options.useCache) {
+            collections = this.cache.listCollections(db);
+        }
+        if (!collections) {
+            let database = inheritDb, persistent = false;
+            if (!database) {
+                if (this.persistentConnected) {
+                    this.persistentActives++;
+                    persistent = true;
+                    database = this.database;
+                }
+                else {
+                    database = new Database(this.uri, this.connectionOptions);
+                    await Database.connectDatabase(database);
+                }
+            }
+
+            try {
+                collections = await database.listCollections(db);
+                this.cache.cacheCollections(db, collections);
+            }
+            catch (error) {
+                /* istanbul ignore next */
+                const e = new ListCollectionsError(null, db, error);
+                /* istanbul ignore next */
+                options.onLackOfPermissions(null, e);
+                /* istanbul ignore next */
+                if (options.ignoreLackOfPermissions) {
+                    return [];
+                }
+                else {
+                    throw e;
+                }
+            }
+            finally {
+                let disconnect = (inheritDb === null);
+                if (persistent) {
+                    this.persistentActives--;
+                    disconnect = (!this.persistentConnected && this.persistentActives === 0);
+                }
+                if (disconnect) {
+                    await Database.disconnectDatabase(database);
+                }
+            }
+
+        }
+        collections = this.filterCollections(collections, options);
+
+        return collections;
     }
 
     /**
@@ -212,6 +327,7 @@ export class MongoScanner {
      * more than an operation and do not want to open and close connections for each of them.
      */
     public async startConnection(): Promise<void> {
+        this.database = new Database(this.uri, this.connectionOptions);
         await Database.connectDatabase(this.database);
         this.persistentConnected = true;
     }
@@ -220,126 +336,73 @@ export class MongoScanner {
      * Closes an already open persistent connection.
      */
     public async endConnection(): Promise<void> {
-        await Database.disconnectDatabase(this.database);
         this.persistentConnected = false;
+
+        if (this.persistentActives === 0) {
+            await Database.disconnectDatabase(this.database);
+        }
     }
 
     /**
      * Retrieves the databases of a mongodb as a promise to an array of strings.
-     * @param opt The [[ScanOptions]] options.
+     * @param options The [[ScanOptions]] options.
      * @returns A promise to an array of strings containing the retrieved databases.
      */
-    public async listDatabases(opt?: ScanOptions): Promise<string[]> {
-        const options = this.mergeOptions(opt);
-
-        let databases: string[];
-        if (options.useCache) {
-            databases = this.cache.listDatabases();
-        }
-        if (!databases) {
-            if (!this.database.connected) {
-                await Database.connectDatabase(this.database);
-            }
-
-            try {
-                databases = await this.database.listDatabases();
-                this.cache.cacheDatabases(databases);
-            }
-            catch(error) {
-                /* istanbul ignore next */
-                const e = /* istanbul ignore next */ new ListDatabasesError(null, error);
-                /* istanbul ignore next */
-                options.onLackOfPermissions(null, e);
-                /* istanbul ignore next */
-                if (options.ignoreLackOfPermissions) {
-                    return [];
-                }
-                else {
-                    throw e;
-                }
-            }
-
-            if (!this.persistentConnected) {
-                await Database.disconnectDatabase(this.database);
-            }
-        }
-        databases = this.filterDatabases(databases, options);
-
-        return databases;
+    public async listDatabases(options?: ScanOptions): Promise<string[]> {
+        const opt = this.mergeOptions(options);
+        return this._listDatabases(opt, null);
     }
 
     /**
      * Retrieves the collections of the specified database as a promise to an array of strings.
      * @param database The database whose collections will be exported.
-     * @param opt The [[ScanOptions]] options.
+     * @param options The [[ScanOptions]] options.
      * @returns A promise to an array of strings containing the retrieved collections.
      */
-    public async listCollections(database: string, opt?: ScanOptions): Promise<string[]> {
-        const options = this.mergeOptions(opt);
-
-        let collections: string[];
-        if (options.useCache) {
-            collections = this.cache.listCollections(database);
-        }
-        if (!collections) {
-            if (!this.database.connected) {
-                await Database.connectDatabase(this.database);
-            }
-
-            try {
-                collections = await this.database.listCollections(database);
-                this.cache.cacheCollections(database, collections);
-            }
-            catch(error) {
-                /* istanbul ignore next */
-                const e = /* istanbul ignore next */ new ListCollectionsError(null, database, error);
-                /* istanbul ignore next */
-                options.onLackOfPermissions(null, e);
-                /* istanbul ignore next */
-                if (options.ignoreLackOfPermissions) {
-                    return [];
-                }
-                else {
-                    throw e;
-                }
-            }
-
-            if (!this.persistentConnected) {
-                await Database.disconnectDatabase(this.database);
-            }
-        }
-        collections = this.filterCollections(collections, options);
-
-        return collections;
+    public async listCollections(database: string, options?: ScanOptions): Promise<string[]> {
+        const opt = this.mergeOptions(options);
+        return this._listCollections(database, opt, null);
     }
 
     /**
      * Retrieves the schema of a mongodb database as a promise to a [[DatabaseSchema]] object.
-     * @param opt The [[ScanOptions]] options.
+     * @param options The [[ScanOptions]] options.
      * @returns A promise to a [[DatabaseSchema]] object representing the database schema. The 
      * keys are the databases and their values the collections of the database as an array of strings
      */
-    public async getSchema(opt?: ScanOptions): Promise<DatabaseSchema> {
-        const options = this.mergeOptions(opt);
-        const keepConnection = this.persistentConnected;
+    public async getSchema(options?: ScanOptions): Promise<DatabaseSchema> {
+        const opt = this.mergeOptions(options);
         let schema: DatabaseSchema = {};
 
-        if (!this.database.connected) {
-            await this.startConnection();
+        let database: Database, persistent: boolean;
+        if (this.persistentConnected) {
+            this.persistentActives++;
+            persistent = true;
+            database = this.database;
+        }
+        else {
+            persistent = false;
+            database = new Database(this.uri, this.connectionOptions);
+            await Database.connectDatabase(database);
         }
 
-        const databases = await this.listDatabases(options);
-        for (const database of databases) {
-            schema[database] = await this.listCollections(database, options);
-            if (options.excludeEmptyDatabases && !schema[database].length) {
-                delete schema[database];
+        const databases = await this._listDatabases(opt, database);
+        for (const db of databases) {
+            schema[db] = await this._listCollections(db, opt, database);
+            if (opt.excludeEmptyDatabases && !schema[db].length) {
+                delete schema[db];
             }
         }
 
-        if (!keepConnection) {
-            await this.endConnection();
+        let disconnect = true;
+        if (persistent) {
+            this.persistentActives--;
+            disconnect = (!this.persistentConnected && this.persistentActives === 0);
         }
-        
+        if (disconnect) {
+            await Database.disconnectDatabase(database);
+        }
+
         return schema;
     }
 

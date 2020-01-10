@@ -173,6 +173,62 @@ export default function() {
 
         });
 
-    });
+        it(`Should get database schema multiple times and concurrently`, async function () {
 
+            const n = 100;
+            const range = [...Array(n).keys()];
+
+            const scanner = new MongoScanner();
+            const actualSchema = orderObject(require('./expected/first.test.json'));
+            
+            const promises = range.map(async () => orderObject(await scanner.getSchema()));
+            const result = await Promise.all(promises);
+
+            const expected = range.map(() => actualSchema);
+            expect(result).to.deep.equal(expected);
+
+        });
+
+        it(`Should get database schema multiple times and concurrently with persistent connection`, async function () {
+
+            const n = 100;
+            const range = [...Array(n).keys()];
+
+            const scanner = new MongoScanner();
+            const actualSchema = orderObject(require('./expected/first.test.json'));
+            
+            await scanner.startConnection();
+            const promises = range.map(async () => orderObject(await scanner.getSchema()));
+            const result = await Promise.all(promises);
+            await scanner.endConnection();
+
+            const expected = range.map(() => actualSchema);
+            expect(result).to.deep.equal(expected);
+
+        });
+
+        it(`Should get database schema multiple times and concurrently and stop the persistent in the middle`, async function () {
+
+            const n = 100;
+            const range = [...Array(n).keys()];
+
+            const scanner = new MongoScanner();
+            const actualSchema = orderObject(require('./expected/first.test.json'));
+            
+            await scanner.startConnection();
+            const stopAndMock = async function() {
+                await scanner.endConnection();
+                return actualSchema;
+            };
+            const promises = range.map(async () => orderObject(await scanner.getSchema()));
+            promises[Math.floor(n / 4)] = stopAndMock();
+            const result = await Promise.all(promises);
+
+            const expected = range.map(() => actualSchema);
+            expect(result).to.deep.equal(expected);
+
+        });
+
+    });
+        
 }
