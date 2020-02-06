@@ -1,6 +1,6 @@
 {
   "name": "mongo-scanner",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "An npm module to retrieve the databases and the collections of a mongodb",
   "main": "dist/source/index.js",
   "types": "dist/source/index.d.ts",

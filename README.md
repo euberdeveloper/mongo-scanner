@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/euberdeveloper/mongo-scanner.svg?branch=master)](https://travis-ci.org/euberdeveloper/mongo-scanner)
 [![Coverage Status](https://coveralls.io/repos/github/euberdeveloper/mongo-scanner/badge.svg?branch=master)](https://coveralls.io/github/euberdeveloper/mongo-scanner?branch=master)
 [![Codecov Status](https://codecov.io/gh/euberdeveloper/mongo-scanner/branch/master/graph/badge.svg)](https://codecov.io/gh/euberdeveloper/mongo-scanner)
+[![Types](https://img.shields.io/npm/types/mongo-scanner.svg)](https://www.npmjs.com/package/mongo-scanner)
 [![Known Vulnerabilities](https://snyk.io/test/github/euberdeveloper/mongo-scanner/badge.svg?targetFile=package.json)](https://snyk.io/test/github/euberdeveloper/mongo-scanner?targetFile=package.json)
 [![dependencies Status](https://david-dm.org/euberdeveloper/mongo-scanner/status.svg)](https://david-dm.org/euberdeveloper/mongo-scanner)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
