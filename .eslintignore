@@ -1,0 +1,5 @@
+**/.eslintrc.js
+**/tsconfig.json
+typedoc.js
+typedoc.dev.js
+webpack.config.js
