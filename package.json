@@ -23,6 +23,12 @@
     "commit": "git-cz",
     "commit:sign": "git-cz -S"
   },
+  "files": [
+    "package.json",
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/euberdeveloper/mongo-scanner.git"
