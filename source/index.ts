@@ -181,17 +181,19 @@ export class MongoScanner {
         return excludes.every(exclude => (typeof exclude === 'string' ? item !== exclude : !exclude.test(item)));
     }
 
-    private filterDatabases(databases: string[], options: ScanOptions): string[] {
-        let result = databases;
+    private filterHelper(elements: string[], exclude?: string | RegExp | (string | RegExp)[]) {
+        let result = elements;
 
-        if (options.excludeDatabases) {
-            const excludes = Array.isArray(options.excludeDatabases)
-                ? options.excludeDatabases
-                : [options.excludeDatabases];
-            result = result.filter(database => this.passes(database, excludes));
+        if (exclude) {
+            const excludes = Array.isArray(exclude) ? exclude : [exclude];
+            result = elements.filter(database => this.passes(database, excludes));
         }
 
         return result;
+    }
+
+    private filterDatabases(databases: string[], options: ScanOptions): string[] {
+        return this.filterHelper(databases, options.excludeDatabases);
     }
 
     private filterCollections(collections: string[], options: ScanOptions): string[] {
@@ -200,12 +202,8 @@ export class MongoScanner {
         if (options.excludeSystem) {
             result = result.filter(collection => !/^system./.test(collection));
         }
-        if (options.excludeCollections) {
-            const excludes = Array.isArray(options.excludeCollections)
-                ? options.excludeCollections
-                : [options.excludeCollections];
-            result = result.filter(database => this.passes(database, excludes));
-        }
+
+        result = this.filterHelper(result, options.excludeCollections);
 
         return result;
     }
