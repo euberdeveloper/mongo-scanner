@@ -3,7 +3,6 @@
  */
 export class MongoScannerError extends Error {
     constructor(message?: string) {
-        /* istanbul ignore next */
         super(message);
     }
 }

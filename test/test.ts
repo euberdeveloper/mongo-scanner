@@ -8,6 +8,7 @@ import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 
+import errors from '@test/errors/errors.test';
 import listDatabases from '@test/listDatabases/listDatabases.test';
 import listCollections from '@test/listCollections/listCollections.test';
 import getSchema from '@test/getSchema/getSchema.test';
@@ -24,4 +25,5 @@ describe('MongoBack module tests', function () {
     persistentConnection();
     clearCache();
     connectionErrors();
+    errors();
 });
