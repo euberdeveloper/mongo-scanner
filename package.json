@@ -10,6 +10,8 @@
     "transpile:source": "tsc --project source",
     "pretranspile": "npm run clean",
     "transpile": "tsc",
+    "prebundle": "npm run clean",
+    "bundle": "webpack",
     "lint:source": "eslint source --ext ts --format codeframe",
     "lint:test": "eslint test --ext ts --format codeframe",
     "lint": "npm run lint:source && npm run lint:test",
@@ -26,7 +28,8 @@
     "docs:html-dev": "typedoc --options typedoc.dev.js",
     "docs": "npm run docs:html && npm run docs:html-dev && npm run docs:tree",
     "commit": "git-cz",
-    "commit:sign": "git-cz -S"
+    "commit:sign": "git-cz -S",
+    "prepublishOnly": "npm run bundle"
   },
   "files": [
     "package.json",
