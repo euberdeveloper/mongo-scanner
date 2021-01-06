@@ -2,10 +2,9 @@ import { MongoClient, MongoClientOptions } from 'mongodb';
 import { ConnectionError, DisconnectionError } from '../errors';
 
 export class Database {
-
-    private uri: string;
+    private readonly uri: string;
     private connection: MongoClient = null;
-    private options: MongoClientOptions = {
+    private readonly options: MongoClientOptions = {
         useUnifiedTopology: true,
         useNewUrlParser: true
     };
@@ -14,9 +13,25 @@ export class Database {
         return this.connection !== null;
     }
 
-    public constructor(uri: string, options: MongoClientOptions) {
+    constructor(uri: string, options: MongoClientOptions) {
         this.uri = uri;
         this.options = { ...options, ...this.options };
+    }
+
+    public static async connectDatabase(database: Database): Promise<void> {
+        try {
+            await database.connect();
+        } catch (error) {
+            throw new ConnectionError(null, database.uri, database.options, error);
+        }
+    }
+
+    public static async disconnectDatabase(database: Database): Promise<void> {
+        try {
+            await database.disconnect();
+        } catch (error) {
+            throw new DisconnectionError(null, database.uri, database.options, error);
+        }
     }
 
     public async connect(): Promise<void> {
@@ -26,13 +41,11 @@ export class Database {
     }
 
     public async listDatabases(): Promise<string[]> {
-        return (await this.connection.db().admin().listDatabases())
-            .databases.map(database => database.name);
+        return (await this.connection.db().admin().listDatabases()).databases.map(database => database.name);
     }
 
     public async listCollections(db: string): Promise<string[]> {
-        return (await this.connection.db(db).listCollections().toArray())
-            .map(collection => collection.name);
+        return (await this.connection.db(db).listCollections().toArray()).map(collection => collection.name);
     }
 
     public async disconnect(): Promise<void> {
@@ -41,23 +54,4 @@ export class Database {
             this.connection = null;
         }
     }
-
-    public static async connectDatabase(database: Database): Promise<void> {
-        try {
-            await database.connect();
-        }
-        catch (error) {
-            throw new ConnectionError(null, database.uri, database.options, error);
-        }
-    }
-
-    public static async disconnectDatabase(database: Database): Promise<void> {
-        try {
-            await database.disconnect();
-        }
-        catch (error) {
-            throw new DisconnectionError(null, database.uri, database.options, error);
-        }
-    }
-
 }

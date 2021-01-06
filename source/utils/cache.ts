@@ -6,11 +6,10 @@ export interface CacheSchema {
 }
 
 export class Cache {
-
     private schema: CacheSchema;
 
     constructor() {
-        this.schema = { databases: null, collections: { } };
+        this.schema = { databases: null, collections: {} };
     }
 
     public listDatabases(): string[] {
@@ -30,7 +29,6 @@ export class Cache {
     }
 
     public refreshCache(): void {
-        this.schema = { databases: null, collections: { } };
+        this.schema = { databases: null, collections: {} };
     }
-
 }

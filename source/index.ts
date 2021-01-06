@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 export * from './errors';
 
 import { Database } from './utils/database';
@@ -6,16 +7,13 @@ import { ListDatabasesError, ListCollectionsError } from './errors';
 
 /**
  * The type of the callback called when there is an error in listing databases or collections.
- * @param db If the error happened when listing collections, the db is the database whose collections 
+ * @param db If the error happened when listing collections, the db is the database whose collections
  * were tried to be provided
- * @param error The error that happened. It is of type [[ListDatabasesError]] if it happened when 
- * listing databases and it is of type [[ListCollectionsError]] if it happened when 
+ * @param error The error that happened. It is of type [[ListDatabasesError]] if it happened when
+ * listing databases and it is of type [[ListCollectionsError]] if it happened when
  * listing collections.
  */
-export type LackOfPermissionsCallback = (
-    db: string,
-    error: ListDatabasesError | ListCollectionsError
-) => void;
+export type LackOfPermissionsCallback = (db: string, error: ListDatabasesError | ListCollectionsError) => void;
 
 /**
  * Represents the database's schema. Every key is a database and every value its collections.
@@ -29,62 +27,62 @@ export interface DatabaseSchema {
  */
 export interface ScanOptions {
     /**
-     * If you want to use the cache before starting a database connection. When true, all the 
-     * previous executions of the [[MongoScanner]] instance will be checked before establishing a 
-     * new database connection. The cache is update every time an execution retrieves data 
+     * If you want to use the cache before starting a database connection. When true, all the
+     * previous executions of the [[MongoScanner]] instance will be checked before establishing a
+     * new database connection. The cache is update every time an execution retrieves data
      * form the database connection.
-     * 
+     *
      * Default: false
      */
     useCache?: boolean;
     /**
-     * Databases that you want to exclude from the result. You can provide a string, a Regexp or 
-     * an array of both. A database will be removed from the result if it is equal to a string 
+     * Databases that you want to exclude from the result. You can provide a string, a Regexp or
+     * an array of both. A database will be removed from the result if it is equal to a string
      * or matches a Regexp.
-     * 
+     *
      * Default: undefined
      */
     excludeDatabases?: string | RegExp | (string | RegExp)[];
     /**
-     * Collections that you want to exclude from the result. You can provide a string, a Regexp or 
-     * an array of both. A collection will be removed from the result if it is equal to a string 
+     * Collections that you want to exclude from the result. You can provide a string, a Regexp or
+     * an array of both. A collection will be removed from the result if it is equal to a string
      * or matches a Regexp.
-     * 
+     *
      * Default: undefined
      */
     excludeCollections?: string | RegExp | (string | RegExp)[];
     /**
      * If you want system collections to be excluded by the result.
-     * 
+     *
      * Default: false
      */
     excludeSystem?: boolean;
     /**
      * If you want to exclude empty databases from the result of the method "getSchema()"
-     * 
+     *
      * NB: Database that are not empty but whose collections are excluded by other options such as
      * excludeSystem or excludeCollections will be considered as empty.
-     * 
+     *
      * Default: false
      */
     excludeEmptyDatabases?: boolean;
     /**
      * If you want to ignore and not throw an error occurred when trying to list databases or collections
-     * but the connection had not permission to do it. 
-     * 
-     * NB: Actually, this will ignore all the errors that 
+     * but the connection had not permission to do it.
+     *
+     * NB: Actually, this will ignore all the errors that
      * will occur when listing database or collections.
-     * 
+     *
      * Default: false
      */
     ignoreLackOfPermissions?: boolean;
     /**
      * The [[LackOfpermissionsCallback]] callback called if an error occurred when trying to list databases or collections
      * but the connection had not permission to do it.
-     * 
-     * NB: Actually, this will be called for all the errors that 
-     * will occur when listing database or collections. 
-     * 
+     *
+     * NB: Actually, this will be called for all the errors that
+     * will occur when listing database or collections.
+     *
      * Default: () => { }
      */
     onLackOfPermissions?: LackOfPermissionsCallback;
@@ -97,16 +95,15 @@ const DEFAULT_OPTIONS: ScanOptions = {
     excludeSystem: false,
     excludeEmptyDatabases: false,
     ignoreLackOfPermissions: false,
-    onLackOfPermissions: () => { }
+    onLackOfPermissions: () => {}
 };
 
 /**
- * The MongoScanner class, to retrieve the database schema or to list databases and collections of 
+ * The MongoScanner class, to retrieve the database schema or to list databases and collections of
  * a MongoDB database.
  */
 export class MongoScanner {
-
-    private cache: Cache;
+    private readonly cache: Cache;
     private database: Database;
     private persistentConnected: boolean;
     private persistentActives: number;
@@ -137,13 +134,13 @@ export class MongoScanner {
     }
 
     /**
-     * The constructor of the [[MongoScanner]] class. The params are the uri and options for the 
-     * database connections. The connection is not established by the constructor, the connection 
+     * The constructor of the [[MongoScanner]] class. The params are the uri and options for the
+     * database connections. The connection is not established by the constructor, the connection
      * parameters are only saved in the [[MongoScanner]] instance.
      * @param uri The string uri of the mongodb connection. Default: 'mongodb://localhost:27017'.
      * @param connectionOptions The options object of the mongodb connection. The npm mongodb module is used under
      * the hood and this is the object provided to MongoClient. Default: { }.
-     * @param options The options that will be used as a fallback for the [[ScanOptions]]. For all the 
+     * @param options The options that will be used as a fallback for the [[ScanOptions]]. For all the
      * keys that will not be present in the options provided to a method that retrieves database or collections,
      * the values provided here will be used instead of the default ones. Default: { }.
      */
@@ -163,7 +160,7 @@ export class MongoScanner {
         const merged: ScanOptions = {};
 
         for (const key in DEFAULT_OPTIONS) {
-            merged[key] = (options[key] === undefined ? DEFAULT_OPTIONS[key] : options[key]);
+            merged[key] = options[key] === undefined ? DEFAULT_OPTIONS[key] : options[key];
         }
 
         return merged;
@@ -174,25 +171,24 @@ export class MongoScanner {
         const merged: ScanOptions = {};
 
         for (const key in this.options) {
-            merged[key] = (options[key] === undefined ? this.options[key] : options[key]);
+            merged[key] = options[key] === undefined ? this.options[key] : options[key];
         }
 
         return merged;
     }
 
     private passes(item: string, excludes: (string | RegExp)[]): boolean {
-        return excludes.every(exclude => typeof exclude === 'string'
-            ? item !== exclude
-            : !exclude.test(item));
+        return excludes.every(exclude => (typeof exclude === 'string' ? item !== exclude : !exclude.test(item)));
     }
 
     private filterDatabases(databases: string[], options: ScanOptions): string[] {
         let result = databases;
 
         if (options.excludeDatabases) {
-            const excludes = Array.isArray(options.excludeDatabases) ? options.excludeDatabases : [options.excludeDatabases];
-            result = result
-                .filter(database => this.passes(database, excludes));
+            const excludes = Array.isArray(options.excludeDatabases)
+                ? options.excludeDatabases
+                : [options.excludeDatabases];
+            result = result.filter(database => this.passes(database, excludes));
         }
 
         return result;
@@ -202,13 +198,13 @@ export class MongoScanner {
         let result = collections;
 
         if (options.excludeSystem) {
-            result = result
-                .filter(collection => !/^system./.test(collection));
+            result = result.filter(collection => !/^system./.test(collection));
         }
         if (options.excludeCollections) {
-            const excludes = Array.isArray(options.excludeCollections) ? options.excludeCollections : [options.excludeCollections];
-            result = result
-                .filter(database => this.passes(database, excludes));
+            const excludes = Array.isArray(options.excludeCollections)
+                ? options.excludeCollections
+                : [options.excludeCollections];
+            result = result.filter(database => this.passes(database, excludes));
         }
 
         return result;
@@ -220,14 +216,14 @@ export class MongoScanner {
             databases = this.cache.listDatabases();
         }
         if (!databases) {
-            let database = inheritDb, persistent = false;
+            let database = inheritDb,
+                persistent = false;
             if (!database) {
                 if (this.persistentConnected) {
                     this.persistentActives++;
                     persistent = true;
                     database = this.database;
-                }
-                else {
+                } else {
                     database = new Database(this.uri, this.connectionOptions);
                     await Database.connectDatabase(database);
                 }
@@ -236,8 +232,7 @@ export class MongoScanner {
             try {
                 databases = await database.listDatabases();
                 this.cache.cacheDatabases(databases);
-            }
-            catch (error) {
+            } catch (error) {
                 /* istanbul ignore next */
                 const e = new ListDatabasesError(null, error);
                 /* istanbul ignore next */
@@ -245,22 +240,19 @@ export class MongoScanner {
                 /* istanbul ignore next */
                 if (options.ignoreLackOfPermissions) {
                     return [];
-                }
-                else {
+                } else {
                     throw e;
                 }
-            }
-            finally {
-                let disconnect = (inheritDb === null);
+            } finally {
+                let disconnect = inheritDb === null;
                 if (persistent) {
                     this.persistentActives--;
-                    disconnect = (!this.persistentConnected && this.persistentActives === 0);
+                    disconnect = !this.persistentConnected && this.persistentActives === 0;
                 }
                 if (disconnect) {
                     await Database.disconnectDatabase(database);
                 }
             }
-
         }
         databases = this.filterDatabases(databases, options);
 
@@ -273,14 +265,14 @@ export class MongoScanner {
             collections = this.cache.listCollections(db);
         }
         if (!collections) {
-            let database = inheritDb, persistent = false;
+            let database = inheritDb,
+                persistent = false;
             if (!database) {
                 if (this.persistentConnected) {
                     this.persistentActives++;
                     persistent = true;
                     database = this.database;
-                }
-                else {
+                } else {
                     database = new Database(this.uri, this.connectionOptions);
                     await Database.connectDatabase(database);
                 }
@@ -289,8 +281,7 @@ export class MongoScanner {
             try {
                 collections = await database.listCollections(db);
                 this.cache.cacheCollections(db, collections);
-            }
-            catch (error) {
+            } catch (error) {
                 /* istanbul ignore next */
                 const e = new ListCollectionsError(null, db, error);
                 /* istanbul ignore next */
@@ -298,22 +289,19 @@ export class MongoScanner {
                 /* istanbul ignore next */
                 if (options.ignoreLackOfPermissions) {
                     return [];
-                }
-                else {
+                } else {
                     throw e;
                 }
-            }
-            finally {
-                let disconnect = (inheritDb === null);
+            } finally {
+                let disconnect = inheritDb === null;
                 if (persistent) {
                     this.persistentActives--;
-                    disconnect = (!this.persistentConnected && this.persistentActives === 0);
+                    disconnect = !this.persistentConnected && this.persistentActives === 0;
                 }
                 if (disconnect) {
                     await Database.disconnectDatabase(database);
                 }
             }
-
         }
         collections = this.filterCollections(collections, options);
 
@@ -323,7 +311,7 @@ export class MongoScanner {
     /**
      * Starts a persistent connection to mongodb. By default, all methods that retrieve databases or
      * collections from the mongodb open a connection before beginning and close it after finishing.
-     * This method allows you to have a persistent connection instead and is useful if you need to perform 
+     * This method allows you to have a persistent connection instead and is useful if you need to perform
      * more than an operation and do not want to open and close connections for each of them.
      */
     public async startConnection(): Promise<void> {
@@ -367,7 +355,7 @@ export class MongoScanner {
     /**
      * Retrieves the schema of a mongodb database as a promise to a [[DatabaseSchema]] object.
      * @param options The [[ScanOptions]] options.
-     * @returns A promise to a [[DatabaseSchema]] object representing the database schema. The 
+     * @returns A promise to a [[DatabaseSchema]] object representing the database schema. The
      * keys are the databases and their values the collections of the database as an array of strings
      */
     public async getSchema(options?: ScanOptions): Promise<DatabaseSchema> {
@@ -379,8 +367,7 @@ export class MongoScanner {
             this.persistentActives++;
             persistent = true;
             database = this.database;
-        }
-        else {
+        } else {
             persistent = false;
             database = new Database(this.uri, this.connectionOptions);
             await Database.connectDatabase(database);
@@ -397,7 +384,7 @@ export class MongoScanner {
         let disconnect = true;
         if (persistent) {
             this.persistentActives--;
-            disconnect = (!this.persistentConnected && this.persistentActives === 0);
+            disconnect = !this.persistentConnected && this.persistentActives === 0;
         }
         if (disconnect) {
             await Database.disconnectDatabase(database);
@@ -407,11 +394,10 @@ export class MongoScanner {
     }
 
     /**
-     * Clears the cache, which contains the results of the previous executions of 
+     * Clears the cache, which contains the results of the previous executions of
      * the [[MongoScanner]] instance.
      */
     public clearCache(): void {
         this.cache.refreshCache();
     }
-
 }

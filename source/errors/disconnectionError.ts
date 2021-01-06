@@ -4,9 +4,8 @@ import { MongoScannerError } from './mongoScannerError';
  * An error occurred with the module mongo-scanner when disconnecting to mongodb.
  */
 export class DisconnectionError extends MongoScannerError {
-
     private static readonly DEFAULT_MESSAGE = 'Error in disconnecting to MongoDB';
-    /** 
+    /**
      * The uri of the failed disconnection.
      */
     public uri: string;
@@ -20,12 +19,10 @@ export class DisconnectionError extends MongoScannerError {
     public triggerError: Error;
 
     constructor(message?: string, uri?: string, options?: any, triggerError?: Error) {
-        /* istanbul ignore next */
-        super(message || DisconnectionError.DEFAULT_MESSAGE);
+        super(message ?? DisconnectionError.DEFAULT_MESSAGE);
         this.name = 'MongoScannerDisconnectionError';
-        this.uri = uri || null;
-        this.options = options || null;
-        this.triggerError = triggerError || null;
+        this.uri = uri ?? null;
+        this.options = options ?? null;
+        this.triggerError = triggerError ?? null;
     }
-
 }
