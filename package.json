@@ -6,8 +6,7 @@
   "types": "dist/source/index.d.ts",
   "scripts": {
     "transpile:source": "tsc --project source",
-    "transpile:test": "tsc --project test",
-    "transpile": "npm run transpile:source && npm run transpile:test",
+    "transpile": "tsc",
     "lint:source": "eslint source --ext ts --format codeframe",
     "lint:test": "eslint source --ext ts --format codeframe",
     "lint": "npm run lint:source && npm run lint:test",
