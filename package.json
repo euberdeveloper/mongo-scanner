@@ -30,7 +30,7 @@
   },
   "files": [
     "package.json",
-    "dist",
+    "bundled",
     "README.md",
     "LICENSE"
   ],
