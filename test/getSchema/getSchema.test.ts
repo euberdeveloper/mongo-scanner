@@ -8,22 +8,17 @@ import { expect } from 'chai';
 import benchmark from '../utils/benchmark';
 import orderObject from '../utils/orderObject';
 
-export default function() {
-
+export default function (): void {
     describe('Test: getSchema function', function () {
-
         it(`Should get the database schema`, async function () {
-
             const scanner = new MongoScanner();
             const expected = orderObject(require('./expected/first.test.json'));
             const result = orderObject(await scanner.getSchema());
 
             expect(result).to.deep.equal(expected);
-
         });
 
         it(`Should get the database schema without system collections`, async function () {
-
             const options: ScanOptions = {
                 excludeSystem: true
             };
@@ -33,11 +28,9 @@ export default function() {
             const result = orderObject(await scanner.getSchema());
 
             expect(result).to.deep.equal(expected);
-
         });
 
         it(`Should get the database schema without the admin database`, async function () {
-
             const options: ScanOptions = {
                 excludeDatabases: 'admin'
             };
@@ -47,11 +40,9 @@ export default function() {
             const result = orderObject(await scanner.getSchema());
 
             expect(result).to.deep.equal(expected);
-
         });
 
         it(`Should get the database schema without the empty database and system collections`, async function () {
-
             const options: ScanOptions = {
                 excludeSystem: true,
                 excludeDatabases: 'empty'
@@ -62,11 +53,9 @@ export default function() {
             const result = orderObject(await scanner.getSchema());
 
             expect(result).to.deep.equal(expected);
-
         });
 
         it(`Should get database schema except the databases containing "database" or "test"`, async function () {
-
             const options: ScanOptions = {
                 excludeDatabases: [/database/, /test/]
             };
@@ -76,11 +65,9 @@ export default function() {
             const result = orderObject(await scanner.getSchema());
 
             expect(result).to.deep.equal(expected);
-
         });
 
         it(`Should get database schema except database vegetables and the ones containing "database" or "test"`, async function () {
-
             const options: ScanOptions = {
                 excludeDatabases: ['vegetables', /database/, /test/]
             };
@@ -90,11 +77,9 @@ export default function() {
             const result = orderObject(await scanner.getSchema());
 
             expect(result).to.deep.equal(expected);
-
         });
 
         it(`Should get database schema except database vegetables and apples and wombats collections`, async function () {
-
             const options: ScanOptions = {
                 excludeDatabases: 'vegetables',
                 excludeCollections: ['apples', 'wombats']
@@ -105,11 +90,9 @@ export default function() {
             const result = orderObject(await scanner.getSchema());
 
             expect(result).to.deep.equal(expected);
-
         });
 
         it(`Should get database schema except test database and collections containing "collection" and system collections`, async function () {
-
             const options: ScanOptions = {
                 excludeSystem: true,
                 excludeDatabases: 'test',
@@ -121,11 +104,9 @@ export default function() {
             const result = orderObject(await scanner.getSchema());
 
             expect(result).to.deep.equal(expected);
-
         });
 
         it(`Should get the database schema and check that with useCache is more efficient`, async function () {
-
             const scanner = new MongoScanner();
 
             const noCacheTime = await benchmark(23, async () => await scanner.getSchema());
@@ -135,11 +116,9 @@ export default function() {
             const expected = orderObject(require('./expected/ninth.test.json'));
             const result = orderObject(await scanner.getSchema({ useCache: true }));
             expect(result).to.deep.equal(expected);
-
         });
 
         it(`Should get database schema except fruits database and cats collection and check that with useCache is more efficient`, async function () {
-
             const options: ScanOptions = {
                 excludeDatabases: 'fruits',
                 excludeCollections: 'cats'
@@ -154,11 +133,9 @@ export default function() {
             const expected = orderObject(require('./expected/tenth.test.json'));
             const result = orderObject(await scanner.getSchema({ useCache: true }));
             expect(result).to.deep.equal(expected);
-
         });
 
         it(`Should get database schema except for the system collections and the collection empty and the empties databases`, async function () {
-
             const options: ScanOptions = {
                 excludeSystem: true,
                 excludeEmptyDatabases: true,
@@ -170,33 +147,29 @@ export default function() {
             const result = orderObject(await scanner.getSchema());
 
             expect(result).to.deep.equal(expected);
-
         });
 
         it(`Should get database schema multiple times and concurrently`, async function () {
-
             const n = 100;
             const range = [...Array(n).keys()];
 
             const scanner = new MongoScanner();
             const actualSchema = orderObject(require('./expected/first.test.json'));
-            
+
             const promises = range.map(async () => orderObject(await scanner.getSchema()));
             const result = await Promise.all(promises);
 
             const expected = range.map(() => actualSchema);
             expect(result).to.deep.equal(expected);
-
         });
 
         it(`Should get database schema multiple times and concurrently with persistent connection`, async function () {
-
             const n = 100;
             const range = [...Array(n).keys()];
 
             const scanner = new MongoScanner();
             const actualSchema = orderObject(require('./expected/first.test.json'));
-            
+
             await scanner.startConnection();
             const promises = range.map(async () => orderObject(await scanner.getSchema()));
             const result = await Promise.all(promises);
@@ -204,19 +177,17 @@ export default function() {
 
             const expected = range.map(() => actualSchema);
             expect(result).to.deep.equal(expected);
-
         });
 
         it(`Should get database schema multiple times and concurrently and stop the persistent in the middle`, async function () {
-
             const n = 100;
             const range = [...Array(n).keys()];
 
             const scanner = new MongoScanner();
             const actualSchema = orderObject(require('./expected/first.test.json'));
-            
+
             await scanner.startConnection();
-            const stopAndMock = async function() {
+            const stopAndMock = async function () {
                 await scanner.endConnection();
                 return actualSchema;
             };
@@ -226,9 +197,6 @@ export default function() {
 
             const expected = range.map(() => actualSchema);
             expect(result).to.deep.equal(expected);
-
         });
-
     });
-        
 }

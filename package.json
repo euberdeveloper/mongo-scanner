@@ -59,7 +59,7 @@
     "mongodb": "^3.6.3"
   },
   "devDependencies": {
-    "@euberdeveloper/eslint-config-typescript": "^4.6.0",
+    "@euberdeveloper/eslint-config-typescript": "^4.7.0",
     "@types/chai": "^4.2.14",
     "@types/chai-as-promised": "^7.1.3",
     "@types/mocha": "^8.2.0",

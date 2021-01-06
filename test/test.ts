@@ -5,8 +5,7 @@ import persistentConnection from './persistentConnection/persistentConnection.te
 import clearCache from './clearCache/clearCache.test';
 import connectionErrors from './connectionErrors/connectionErrors.test';
 
-describe('MongoBack module tests', function() {
-
+describe('MongoBack module tests', function () {
     this.timeout(0);
 
     listDatabases();
@@ -15,5 +14,4 @@ describe('MongoBack module tests', function() {
     persistentConnection();
     clearCache();
     connectionErrors();
-
 });

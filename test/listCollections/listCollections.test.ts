@@ -7,12 +7,9 @@ import { expect } from 'chai';
 
 import benchmark from '../utils/benchmark';
 
-export default function() {
-
+export default function (): void {
     describe('Test: listCollections function', function () {
-
         it(`Should list all collections of animals`, async function () {
-
             const scanner = new MongoScanner();
             const actualCollections = ['cats', 'cows', 'dogs', 'horses', 'lions', 'tigers', 'wombats'];
             const collections = await scanner.listCollections('animals');
@@ -20,11 +17,9 @@ export default function() {
             const result = actualCollections.sort().join();
             const expected = collections.sort().join();
             expect(result).to.equal(expected);
-
         });
 
         it(`Should list all collections of vegetables`, async function () {
-
             const scanner = new MongoScanner();
             const actualCollections = ['carrots', 'celery', 'fennel', 'lattuce'];
             const collections = await scanner.listCollections('vegetables');
@@ -32,11 +27,9 @@ export default function() {
             const result = actualCollections.sort().join();
             const expected = collections.sort().join();
             expect(result).to.equal(expected);
-
         });
 
         it(`Should list all collections of fruits`, async function () {
-
             const scanner = new MongoScanner();
             const actualCollections = ['apples', 'bananas', 'lemons', 'oranges'];
             const collections = await scanner.listCollections('fruits');
@@ -44,11 +37,9 @@ export default function() {
             const result = actualCollections.sort().join();
             const expected = collections.sort().join();
             expect(result).to.equal(expected);
-
         });
 
         it(`Should list all collections of database except for collection`, async function () {
-
             const options: ScanOptions = {
                 excludeCollections: 'collection'
             };
@@ -60,11 +51,9 @@ export default function() {
             const result = actualCollections.sort().join();
             const expected = collections.sort().join();
             expect(result).to.equal(expected);
-
         });
 
         it(`Should list all collections of database that do not finish with "_n"`, async function () {
-
             const options: ScanOptions = {
                 excludeCollections: /_[\d]/
             };
@@ -76,11 +65,9 @@ export default function() {
             const result = actualCollections.sort().join();
             const expected = collections.sort().join();
             expect(result).to.equal(expected);
-
         });
 
         it(`Should list all collections of test except for test`, async function () {
-
             const options: ScanOptions = {
                 excludeCollections: 'test'
             };
@@ -92,11 +79,9 @@ export default function() {
             const result = actualCollections.sort().join();
             const expected = collections.sort().join();
             expect(result).to.equal(expected);
-
         });
 
         it(`Should list all collections of test that do not finish with "_n"`, async function () {
-
             const options: ScanOptions = {
                 excludeCollections: /_[\d]$/
             };
@@ -108,11 +93,9 @@ export default function() {
             const result = actualCollections.sort().join();
             const expected = collections.sort().join();
             expect(result).to.equal(expected);
-
         });
 
         it(`Should list all collections of database_test except for collection and test`, async function () {
-
             const options: ScanOptions = {
                 excludeCollections: ['collection', 'test']
             };
@@ -124,11 +107,9 @@ export default function() {
             const result = actualCollections.sort().join();
             const expected = collections.sort().join();
             expect(result).to.equal(expected);
-
         });
 
         it(`Should list all collections of database_test that do not finish with "_n" and are not test`, async function () {
-
             const options: ScanOptions = {
                 excludeCollections: [/_[\d]$/, 'test']
             };
@@ -140,11 +121,9 @@ export default function() {
             const result = actualCollections.sort().join();
             const expected = collections.sort().join();
             expect(result).to.equal(expected);
-
         });
 
         it(`Should list all collections of admin`, async function () {
-
             const scanner = new MongoScanner();
             const actualCollections = ['system.version'];
             const collections = await scanner.listCollections('admin');
@@ -152,11 +131,9 @@ export default function() {
             const result = actualCollections.sort().join();
             const expected = collections.sort().join();
             expect(result).to.equal(expected);
-
         });
 
         it(`Should list all collections of admin except for the system ones`, async function () {
-
             const options: ScanOptions = {
                 excludeSystem: true
             };
@@ -165,15 +142,16 @@ export default function() {
             const collections = await scanner.listCollections('admin');
 
             expect(collections).to.be.empty;
-
         });
 
         it(`Should list all collections of animals and check that using cache it is more efficient`, async function () {
-
             const scanner = new MongoScanner();
-            
+
             const noCacheTime = await benchmark(23, async () => await scanner.listCollections('animals'));
-            const cacheTime = await benchmark(23, async () => await scanner.listCollections('animals', { useCache: true }));
+            const cacheTime = await benchmark(
+                23,
+                async () => await scanner.listCollections('animals', { useCache: true })
+            );
             expect(cacheTime < noCacheTime).to.true;
 
             const actualCollections = ['cats', 'cows', 'dogs', 'horses', 'lions', 'tigers', 'wombats'];
@@ -181,18 +159,19 @@ export default function() {
             const result = actualCollections.sort().join();
             const expected = collections.sort().join();
             expect(result).to.equal(expected);
-
         });
 
         it(`Should list all collections of fruits except apples and bananas and check that using cache it is more efficient`, async function () {
-
             const options: ScanOptions = {
                 excludeCollections: ['apples', 'bananas']
             };
             const scanner = new MongoScanner(null, null, options);
-            
+
             const noCacheTime = await benchmark(23, async () => await scanner.listCollections('fruits'));
-            const cacheTime = await benchmark(23, async () => await scanner.listCollections('fruits', { useCache: true }));
+            const cacheTime = await benchmark(
+                23,
+                async () => await scanner.listCollections('fruits', { useCache: true })
+            );
             expect(cacheTime < noCacheTime).to.true;
 
             const actualCollections = ['lemons', 'oranges'];
@@ -203,29 +182,26 @@ export default function() {
         });
 
         it(`Should list all collections of animals multiple times and concurrently`, async function () {
-
             const n = 100;
             const range = [...Array(n).keys()];
 
             const scanner = new MongoScanner();
             const actualCollections = ['cats', 'cows', 'dogs', 'horses', 'lions', 'tigers', 'wombats'];
-            
+
             const promises = range.map(async () => (await scanner.listCollections('animals')).sort());
             const result = await Promise.all(promises);
 
             const expected = range.map(() => actualCollections.sort());
             expect(result).to.deep.equal(expected);
-
         });
 
         it(`Should list all collections of animals multiple times and concurrently with persistent connection`, async function () {
-
             const n = 100;
             const range = [...Array(n).keys()];
 
             const scanner = new MongoScanner();
             const actualCollections = ['cats', 'cows', 'dogs', 'horses', 'lions', 'tigers', 'wombats'];
-            
+
             await scanner.startConnection();
             const promises = range.map(async () => (await scanner.listCollections('animals')).sort());
             const result = await Promise.all(promises);
@@ -233,19 +209,17 @@ export default function() {
 
             const expected = range.map(() => actualCollections.sort());
             expect(result).to.deep.equal(expected);
-
         });
 
         it(`Should list all collections of animals multiple times and concurrently and stop the persistent in the middle`, async function () {
-
             const n = 100;
             const range = [...Array(n).keys()];
 
             const scanner = new MongoScanner();
             const actualCollections = ['cats', 'cows', 'dogs', 'horses', 'lions', 'tigers', 'wombats'];
-            
+
             await scanner.startConnection();
-            const stopAndMock = async function() {
+            const stopAndMock = async function () {
                 await scanner.endConnection();
                 return actualCollections.sort();
             };
@@ -255,9 +229,6 @@ export default function() {
 
             const expected = range.map(() => actualCollections.sort());
             expect(result).to.deep.equal(expected);
-
         });
-
     });
-
 }
