@@ -22,6 +22,9 @@
     "test": "mocha dist/test/test.js --reporter spec",
     "nyc": "nyc --extension=ts --reporter=html --reporter=text --reporter=lcov npm run test",
     "docs:tree": "dree parse . --dest docs/tree --name tree --options docs/tree/dree.config.json",
+    "docs:html": "typedoc",
+    "docs:html-dev": "typedoc --options typedoc.dev.js",
+    "docs": "npm run docs:html && npm run docs:html-dev && npm run docs:tree",
     "commit": "git-cz",
     "commit:sign": "git-cz -S"
   },
@@ -77,6 +80,7 @@
     "nyc": "^15.1.0",
     "prettier": "^2.2.1",
     "shx": "^0.3.3",
+    "typedoc": "^0.20.13",
     "typescript": "^4.1.3"
   },
   "config": {
