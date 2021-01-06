@@ -11,6 +11,7 @@
 [![License](https://img.shields.io/npm/l/mongo-scanner.svg?color=blue)](https://github.com/euberdeveloper/mongo-scanner/blob/master/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/euberdeveloper/mongo-scanner.svg)](https://github.com/euberdeveloper/mongo-scanner/stargazers)
 ![npm](https://img.shields.io/npm/v/mongo-scanner.svg)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/529f6967d2bb067049f7/test_coverage)](https://codeclimate.com/github/euberdeveloper/mongo-scanner/test_coverage)
 
 # mongo-scanner
 An npm module to retrieve the databases and the collections of a mongodb.
