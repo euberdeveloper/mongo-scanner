@@ -1,4 +1,4 @@
-import { MongoScanner } from '../../source/index';
+import { MongoScanner } from '@src/index';
 
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';

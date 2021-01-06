@@ -1,9 +1,15 @@
-import listDatabases from './listDatabases/listDatabases.test';
-import listCollections from './listCollections/listCollections.test';
-import getSchema from './getSchema/getSchema.test';
-import persistentConnection from './persistentConnection/persistentConnection.test';
-import clearCache from './clearCache/clearCache.test';
-import connectionErrors from './connectionErrors/connectionErrors.test';
+import * as moduleAlias from 'module-alias';
+import * as path from 'path';
+moduleAlias.addAlias('@', path.join(process.cwd(), 'dist', 'source'));
+moduleAlias.addAlias('@src', path.join(process.cwd(), 'dist', 'source'));
+moduleAlias.addAlias('@test', path.join(process.cwd(), 'dist', 'test'));
+
+import listDatabases from '@test/listDatabases/listDatabases.test';
+import listCollections from '@test/listCollections/listCollections.test';
+import getSchema from '@test/getSchema/getSchema.test';
+import persistentConnection from '@test/persistentConnection/persistentConnection.test';
+import clearCache from '@test/clearCache/clearCache.test';
+import connectionErrors from '@test/connectionErrors/connectionErrors.test';
 
 describe('MongoBack module tests', function () {
     this.timeout(0);

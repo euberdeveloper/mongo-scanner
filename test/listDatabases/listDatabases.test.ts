@@ -1,11 +1,11 @@
-import { MongoScanner, ScanOptions } from '../../source/index';
+import { MongoScanner, ScanOptions } from '@src/index';
 
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 import { expect } from 'chai';
 
-import benchmark from '../utils/benchmark';
+import benchmark from '@test/utils/benchmark';
 
 export default function (): void {
     describe('Test: listDatabases function', function () {
