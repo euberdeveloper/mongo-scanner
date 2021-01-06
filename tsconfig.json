@@ -9,5 +9,5 @@
         "resolveJsonModule": true,
         "downlevelIteration": true
     },
-    "include": [ "test", "source" ]
+    "include": [ "source", "test", "test/**/*.test.json" ]
 }
