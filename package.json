@@ -19,7 +19,7 @@
     "db:clean": "mongo-cleaner clean -y",
     "db:restore": "mongorestore test/mock --quiet",
     "db:populate": "npm run db:clean && npm run db:restore",
-    "test": "mocha dist/test/test --reporter spec",
+    "test": "mocha dist/test/test.js --reporter spec",
     "nyc": "nyc --extension=ts --reporter=html --reporter=text --reporter=lcov npm run test",
     "docs:tree": "dree parse . --dest docs/tree --name tree --options docs/tree/dree.config.json",
     "commit": "git-cz",
