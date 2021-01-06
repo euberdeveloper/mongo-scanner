@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-export * from './errors';
+export * from '@/errors';
 
-import { Database } from './utils/database';
-import { Cache } from './utils/cache';
-import { ListDatabasesError, ListCollectionsError } from './errors';
+import { Database } from '@/utils/database';
+import { Cache } from '@/utils/cache';
+import { ListDatabasesError, ListCollectionsError } from '@/errors';
 
 /**
  * The type of the callback called when there is an error in listing databases or collections.
