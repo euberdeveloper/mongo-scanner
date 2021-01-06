@@ -5,6 +5,7 @@
   "main": "dist/source/index.js",
   "types": "dist/source/index.d.ts",
   "scripts": {
+    "clean": "shx rm -rf dist bundled",
     "transpile:source": "tsc --project source",
     "transpile": "tsc",
     "lint:source": "eslint source --ext ts --format codeframe",
@@ -73,6 +74,7 @@
     "mongo-cleaner": "^3.3.4",
     "nyc": "^15.1.0",
     "prettier": "^2.2.1",
+    "shx": "^0.3.3",
     "typescript": "^4.1.3"
   },
   "config": {
