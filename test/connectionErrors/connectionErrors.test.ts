@@ -1,8 +1,5 @@
 import { MongoScanner } from '@src/index';
 
-import * as chai from 'chai';
-import * as chaiAsPromised from 'chai-as-promised';
-chai.use(chaiAsPromised);
 import { expect } from 'chai';
 
 export default function (): void {
