@@ -31,7 +31,7 @@ export default function (): void {
 
             expect(error).to.be.instanceOf(Error);
             expect(error).to.be.instanceOf(ConnectionError);
-            expect(error.name).to.equals('ConnectionError');
+            expect(error.name).to.equals('MongoScannerConnectionError');
         });
         it(`Should properly create a custom ConnectionError`, function () {
             const triggerError = new Error();
@@ -40,7 +40,7 @@ export default function (): void {
 
             expect(error).to.be.instanceOf(Error);
             expect(error).to.be.instanceOf(ConnectionError);
-            expect(error.name).to.equals('ConnectionError');
+            expect(error.name).to.equals('MongoScannerConnectionError');
             expect(error.message).to.equals('MESSAGE');
             expect(error.uri).to.equals('uri');
             expect(error.options).to.equals(options);
@@ -52,7 +52,7 @@ export default function (): void {
 
             expect(error).to.be.instanceOf(Error);
             expect(error).to.be.instanceOf(DisconnectionError);
-            expect(error.name).to.equals('DisconnectionError');
+            expect(error.name).to.equals('MongoScannerDisconnectionError');
         });
         it(`Should properly create a custom DisconnectionError`, function () {
             const triggerError = new Error();
@@ -61,7 +61,7 @@ export default function (): void {
 
             expect(error).to.be.instanceOf(Error);
             expect(error).to.be.instanceOf(DisconnectionError);
-            expect(error.name).to.equals('DisconnectionError');
+            expect(error.name).to.equals('MongoScannerDisconnectionError');
             expect(error.message).to.equals('MESSAGE');
             expect(error.uri).to.equals('uri');
             expect(error.options).to.equals(options);
@@ -73,14 +73,14 @@ export default function (): void {
 
             expect(error).to.be.instanceOf(Error);
             expect(error).to.be.instanceOf(ListCollectionsError);
-            expect(error.name).to.equals('ListCollectionsError');
+            expect(error.name).to.equals('MongoScannerListCollectionsError');
         });
         it(`Should properly create a custom ListCollectionsError`, function () {
             const error = new ListCollectionsError('MESSAGE', 'db');
 
             expect(error).to.be.instanceOf(Error);
             expect(error).to.be.instanceOf(ListCollectionsError);
-            expect(error.name).to.equals('ListCollectionsError');
+            expect(error.name).to.equals('MongoScannerListCollectionsError');
             expect(error.message).to.equals('MESSAGE');
             expect(error.db).to.equals('db');
         });
@@ -90,14 +90,14 @@ export default function (): void {
 
             expect(error).to.be.instanceOf(Error);
             expect(error).to.be.instanceOf(ListDatabasesError);
-            expect(error.name).to.equals('ListDatabasesError');
+            expect(error.name).to.equals('MongoScannerListDatabasesError');
         });
         it(`Should properly create a custom ListDatabasesError`, function () {
             const error = new ListDatabasesError('MESSAGE');
 
             expect(error).to.be.instanceOf(Error);
             expect(error).to.be.instanceOf(ListDatabasesError);
-            expect(error.name).to.equals('ListDatabasesError');
+            expect(error.name).to.equals('MongoScannerListDatabasesError');
             expect(error.message).to.equals('MESSAGE');
         });
     });
