@@ -228,6 +228,11 @@ The `getSchema` method returns a result like this:
 
 ## API
 
+Documentation's sites:
+
+- [For users of the module](https://mongo-scanner.euberdeveloper.vercel.app)
+- [For development](https://mongo-scanner-dev.euberdeveloper.vercel.app)
+
 ### MongoScanner
 
 The MongoScanner class, to retrieve the database schema or to list databases and collections of a MongoDB database.
