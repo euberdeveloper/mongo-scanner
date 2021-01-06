@@ -43,7 +43,7 @@
   "bugs": {
     "url": "https://github.com/euberdeveloper/mongo-scanner/issues"
   },
-  "homepage": "https://github.com/euberdeveloper/mongo-scanner#readme",
+  "homepage": "https://mongo-scanner.vercel.app",
   "keywords": [
     "mongo-scanner",
     "mongo",
