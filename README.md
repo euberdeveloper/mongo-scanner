@@ -1,3 +1,5 @@
+![Test](https://github.com/euberdeveloper/mongo-scanner/workflows/Test/badge.svg)
+![Lint](https://github.com/euberdeveloper/mongo-scanner/workflows/Lint/badge.svg)
 [![Build Status](https://travis-ci.org/euberdeveloper/mongo-scanner.svg?branch=master)](https://travis-ci.org/euberdeveloper/mongo-scanner)
 [![Coverage Status](https://coveralls.io/repos/github/euberdeveloper/mongo-scanner/badge.svg?branch=master)](https://coveralls.io/github/euberdeveloper/mongo-scanner?branch=master)
 [![Codecov Status](https://codecov.io/gh/euberdeveloper/mongo-scanner/branch/master/graph/badge.svg)](https://codecov.io/gh/euberdeveloper/mongo-scanner)
