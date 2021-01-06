@@ -11,7 +11,7 @@
     "pretranspile": "npm run clean",
     "transpile": "tsc",
     "lint:source": "eslint source --ext ts --format codeframe",
-    "lint:test": "eslint source --ext ts --format codeframe",
+    "lint:test": "eslint test --ext ts --format codeframe",
     "lint": "npm run lint:source && npm run lint:test",
     "lint:source:fix": "eslint source --ext ts --format codeframe --fix",
     "lint:test:fix": "eslint test --ext ts --format codeframe --fix",
