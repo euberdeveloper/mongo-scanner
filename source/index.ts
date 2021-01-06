@@ -259,7 +259,7 @@ export class MongoScanner {
         return databases;
     }
 
-    public async _listCollections(db: string, options: ScanOptions, inheritDb: Database): Promise<string[]> {
+    private async _listCollections(db: string, options: ScanOptions, inheritDb: Database): Promise<string[]> {
         let collections: string[];
         if (options.useCache) {
             collections = this.cache.listCollections(db);
