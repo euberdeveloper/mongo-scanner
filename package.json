@@ -6,7 +6,9 @@
   "types": "dist/source/index.d.ts",
   "scripts": {
     "clean": "shx rm -rf dist bundled",
+    "pretranspile:source": "npm run clean",
     "transpile:source": "tsc --project source",
+    "pretranspile": "npm run clean",
     "transpile": "tsc",
     "lint:source": "eslint source --ext ts --format codeframe",
     "lint:test": "eslint source --ext ts --format codeframe",
