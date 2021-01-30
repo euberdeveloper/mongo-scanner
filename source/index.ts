@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-export * from '@/errors';
+export * from './errors';
 
 import { Database } from '@/utils/database';
 import { Cache } from '@/utils/cache';
