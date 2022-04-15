@@ -1,6 +1,6 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
-const DtsBundleWebpack = require('dts-bundle-webpack');
+const BundleDeclarationsWebpackPlugin = require('bundle-declarations-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
@@ -32,10 +32,9 @@ module.exports = {
         ]
     },
     plugins: [
-        new DtsBundleWebpack({
-            name: 'mongo-scanner',
-            main: 'dist/index.d.ts',
-            out: '../bundled/index.d.ts'
+        new BundleDeclarationsWebpackPlugin({
+            entry: "./source/index.ts",
+            outFile: "./index.d.ts"
         })
     ],
     externals: [nodeExternals()],

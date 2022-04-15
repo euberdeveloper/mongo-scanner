@@ -1,5 +1,5 @@
 import { MongoClient, MongoClientOptions } from 'mongodb';
-import { ConnectionError, DisconnectionError } from '@/errors';
+import { MongoScannerConnectionError, MongoScannerDisconnectionError } from '@/errors';
 
 export class Database {
     private readonly uri: string;
@@ -22,7 +22,7 @@ export class Database {
         try {
             await database.connect();
         } catch (error) {
-            throw new ConnectionError(null, database.uri, database.options, error);
+            throw new MongoScannerConnectionError(null, database.uri, database.options, error);
         }
     }
 
@@ -30,7 +30,7 @@ export class Database {
         try {
             await database.disconnect();
         } catch (error) {
-            throw new DisconnectionError(null, database.uri, database.options, error);
+            throw new MongoScannerDisconnectionError(null, database.uri, database.options, error);
         }
     }
 

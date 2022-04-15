@@ -1,9 +1,9 @@
 import {
     MongoScannerError,
-    ConnectionError,
-    DisconnectionError,
-    ListCollectionsError,
-    ListDatabasesError
+    MongoScannerConnectionError,
+    MongoScannerDisconnectionError,
+    MongoScannerListCollectionsError,
+    MongoScannerListDatabasesError
 } from '@src/errors';
 
 import { expect } from 'chai';
@@ -26,20 +26,20 @@ export default function (): void {
             expect(error.message).to.equals('MESSAGE');
         });
 
-        it(`Should properly create a default ConnectionError`, function () {
-            const error = new ConnectionError();
+        it(`Should properly create a default MongoScannerConnectionError`, function () {
+            const error = new MongoScannerConnectionError();
 
             expect(error).to.be.instanceOf(Error);
-            expect(error).to.be.instanceOf(ConnectionError);
+            expect(error).to.be.instanceOf(MongoScannerConnectionError);
             expect(error.name).to.equals('MongoScannerConnectionError');
         });
-        it(`Should properly create a custom ConnectionError`, function () {
+        it(`Should properly create a custom MongoScannerConnectionError`, function () {
             const triggerError = new Error();
             const options = {};
-            const error = new ConnectionError('MESSAGE', 'uri', options, triggerError);
+            const error = new MongoScannerConnectionError('MESSAGE', 'uri', options, triggerError);
 
             expect(error).to.be.instanceOf(Error);
-            expect(error).to.be.instanceOf(ConnectionError);
+            expect(error).to.be.instanceOf(MongoScannerConnectionError);
             expect(error.name).to.equals('MongoScannerConnectionError');
             expect(error.message).to.equals('MESSAGE');
             expect(error.uri).to.equals('uri');
@@ -47,20 +47,20 @@ export default function (): void {
             expect(error.triggerError).to.equals(triggerError);
         });
 
-        it(`Should properly create a default DisconnectionError`, function () {
-            const error = new DisconnectionError();
+        it(`Should properly create a default MongoScannerDisconnectionError`, function () {
+            const error = new MongoScannerDisconnectionError();
 
             expect(error).to.be.instanceOf(Error);
-            expect(error).to.be.instanceOf(DisconnectionError);
+            expect(error).to.be.instanceOf(MongoScannerDisconnectionError);
             expect(error.name).to.equals('MongoScannerDisconnectionError');
         });
-        it(`Should properly create a custom DisconnectionError`, function () {
+        it(`Should properly create a custom MongoScannerDisconnectionError`, function () {
             const triggerError = new Error();
             const options = {};
-            const error = new DisconnectionError('MESSAGE', 'uri', options, triggerError);
+            const error = new MongoScannerDisconnectionError('MESSAGE', 'uri', options, triggerError);
 
             expect(error).to.be.instanceOf(Error);
-            expect(error).to.be.instanceOf(DisconnectionError);
+            expect(error).to.be.instanceOf(MongoScannerDisconnectionError);
             expect(error.name).to.equals('MongoScannerDisconnectionError');
             expect(error.message).to.equals('MESSAGE');
             expect(error.uri).to.equals('uri');
@@ -68,35 +68,35 @@ export default function (): void {
             expect(error.triggerError).to.equals(triggerError);
         });
 
-        it(`Should properly create a default ListCollectionsError`, function () {
-            const error = new ListCollectionsError();
+        it(`Should properly create a default MongoScannerListCollectionsError`, function () {
+            const error = new MongoScannerListCollectionsError();
 
             expect(error).to.be.instanceOf(Error);
-            expect(error).to.be.instanceOf(ListCollectionsError);
+            expect(error).to.be.instanceOf(MongoScannerListCollectionsError);
             expect(error.name).to.equals('MongoScannerListCollectionsError');
         });
-        it(`Should properly create a custom ListCollectionsError`, function () {
-            const error = new ListCollectionsError('MESSAGE', 'db');
+        it(`Should properly create a custom MongoScannerListCollectionsError`, function () {
+            const error = new MongoScannerListCollectionsError('MESSAGE', 'db');
 
             expect(error).to.be.instanceOf(Error);
-            expect(error).to.be.instanceOf(ListCollectionsError);
+            expect(error).to.be.instanceOf(MongoScannerListCollectionsError);
             expect(error.name).to.equals('MongoScannerListCollectionsError');
             expect(error.message).to.equals('MESSAGE');
             expect(error.db).to.equals('db');
         });
 
-        it(`Should properly create a default ListDatabasesError`, function () {
-            const error = new ListDatabasesError();
+        it(`Should properly create a default MongoScannerListDatabasesError`, function () {
+            const error = new MongoScannerListDatabasesError();
 
             expect(error).to.be.instanceOf(Error);
-            expect(error).to.be.instanceOf(ListDatabasesError);
+            expect(error).to.be.instanceOf(MongoScannerListDatabasesError);
             expect(error.name).to.equals('MongoScannerListDatabasesError');
         });
-        it(`Should properly create a custom ListDatabasesError`, function () {
-            const error = new ListDatabasesError('MESSAGE');
+        it(`Should properly create a custom MongoScannerListDatabasesError`, function () {
+            const error = new MongoScannerListDatabasesError('MESSAGE');
 
             expect(error).to.be.instanceOf(Error);
-            expect(error).to.be.instanceOf(ListDatabasesError);
+            expect(error).to.be.instanceOf(MongoScannerListDatabasesError);
             expect(error.name).to.equals('MongoScannerListDatabasesError');
             expect(error.message).to.equals('MESSAGE');
         });

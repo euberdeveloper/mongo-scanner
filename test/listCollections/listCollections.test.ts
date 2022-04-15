@@ -52,7 +52,7 @@ export default function (): void {
 
         it(`Should list all collections of database that do not finish with "_n"`, async function () {
             const options: ScanOptions = {
-                excludeCollections: /_[\d]/
+                excludeCollections: /_\d/
             };
 
             const scanner = new MongoScanner(null, null, options);
@@ -80,7 +80,7 @@ export default function (): void {
 
         it(`Should list all collections of test that do not finish with "_n"`, async function () {
             const options: ScanOptions = {
-                excludeCollections: /_[\d]$/
+                excludeCollections: /_\d$/
             };
 
             const scanner = new MongoScanner(null, null, options);
@@ -108,7 +108,7 @@ export default function (): void {
 
         it(`Should list all collections of database_test that do not finish with "_n" and are not test`, async function () {
             const options: ScanOptions = {
-                excludeCollections: [/_[\d]$/, 'test']
+                excludeCollections: [/_\d$/, 'test']
             };
 
             const scanner = new MongoScanner(null, null, options);
@@ -180,7 +180,7 @@ export default function (): void {
 
         it(`Should list all collections of animals multiple times and concurrently`, async function () {
             const n = 100;
-            const range = [...Array(n).keys()];
+            const range = [...new Array(n).keys()];
 
             const scanner = new MongoScanner();
             const actualCollections = ['cats', 'cows', 'dogs', 'horses', 'lions', 'tigers', 'wombats'];
@@ -194,7 +194,7 @@ export default function (): void {
 
         it(`Should list all collections of animals multiple times and concurrently with persistent connection`, async function () {
             const n = 100;
-            const range = [...Array(n).keys()];
+            const range = [...new Array(n).keys()];
 
             const scanner = new MongoScanner();
             const actualCollections = ['cats', 'cows', 'dogs', 'horses', 'lions', 'tigers', 'wombats'];
@@ -210,7 +210,7 @@ export default function (): void {
 
         it(`Should list all collections of animals multiple times and concurrently and stop the persistent in the middle`, async function () {
             const n = 100;
-            const range = [...Array(n).keys()];
+            const range = [...new Array(n).keys()];
 
             const scanner = new MongoScanner();
             const actualCollections = ['cats', 'cows', 'dogs', 'horses', 'lions', 'tigers', 'wombats'];

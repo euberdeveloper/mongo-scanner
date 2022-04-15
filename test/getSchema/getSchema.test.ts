@@ -148,7 +148,7 @@ export default function (): void {
 
         it(`Should get database schema multiple times and concurrently`, async function () {
             const n = 100;
-            const range = [...Array(n).keys()];
+            const range = [...new Array(n).keys()];
 
             const scanner = new MongoScanner();
             const actualSchema = orderObject(require('./expected/first.test.json'));
@@ -162,7 +162,7 @@ export default function (): void {
 
         it(`Should get database schema multiple times and concurrently with persistent connection`, async function () {
             const n = 100;
-            const range = [...Array(n).keys()];
+            const range = [...new Array(n).keys()];
 
             const scanner = new MongoScanner();
             const actualSchema = orderObject(require('./expected/first.test.json'));
@@ -178,7 +178,7 @@ export default function (): void {
 
         it(`Should get database schema multiple times and concurrently and stop the persistent in the middle`, async function () {
             const n = 100;
-            const range = [...Array(n).keys()];
+            const range = [...new Array(n).keys()];
 
             const scanner = new MongoScanner();
             const actualSchema = orderObject(require('./expected/first.test.json'));

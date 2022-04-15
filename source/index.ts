@@ -3,7 +3,7 @@ export * from './errors';
 
 import { Database } from '@/utils/database';
 import { Cache } from '@/utils/cache';
-import { ListDatabasesError, ListCollectionsError } from './errors';
+import { MongoScannerListDatabasesError, MongoScannerListCollectionsError } from './errors';
 
 /**
  * The type of the callback called when there is an error in listing databases or collections.
@@ -13,7 +13,10 @@ import { ListDatabasesError, ListCollectionsError } from './errors';
  * listing databases and it is of type [[ListCollectionsError]] if it happened when
  * listing collections.
  */
-export type LackOfPermissionsCallback = (db: string, error: ListDatabasesError | ListCollectionsError) => void;
+export type LackOfPermissionsCallback = (
+    db: string,
+    error: MongoScannerListDatabasesError | MongoScannerListCollectionsError
+) => void;
 
 /**
  * Represents the database's schema. Every key is a database and every value its collections.
@@ -232,7 +235,7 @@ export class MongoScanner {
                 this.cache.cacheDatabases(databases);
             } catch (error) {
                 /* istanbul ignore next */
-                const e = new ListDatabasesError(null, error);
+                const e = new MongoScannerListDatabasesError(null, error);
                 /* istanbul ignore next */
                 options.onLackOfPermissions(null, e);
                 /* istanbul ignore next */
@@ -281,7 +284,7 @@ export class MongoScanner {
                 this.cache.cacheCollections(db, collections);
             } catch (error) {
                 /* istanbul ignore next */
-                const e = new ListCollectionsError(null, db, error);
+                const e = new MongoScannerListCollectionsError(null, db, error);
                 /* istanbul ignore next */
                 options.onLackOfPermissions(null, e);
                 /* istanbul ignore next */
