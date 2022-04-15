@@ -421,8 +421,7 @@ mongo-scanner
  ├── LICENSE
  ├── README.md
  ├── package-lock.json
- ├── package.json
- └── tslint.json
+ └── package.json
 ```
 
 ## Build
