@@ -4,10 +4,7 @@ import { MongoScannerConnectionError, MongoScannerDisconnectionError } from '@/e
 export class Database {
     private readonly uri: string;
     private connection: MongoClient = null;
-    private readonly options: MongoClientOptions = {
-        useUnifiedTopology: true,
-        useNewUrlParser: true
-    };
+    private readonly options: MongoClientOptions = {};
 
     get connected(): boolean {
         return this.connection !== null;
